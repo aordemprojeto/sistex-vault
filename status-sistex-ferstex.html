@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Status estratégico do projeto SISTEX — alinhamento Ferstex × YNTHEGRA">
+<meta name="author" content="YNTHEGRA">
+<meta name="robots" content="noindex,nofollow">
+<title>Status SISTEX · Ferstex × YNTHEGRA</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy-deepest: #060f1e;
+  --navy-deep: #0a1629;
+  --navy: #0f2744;
+  --navy-soft: #1a3558;
+  --blue: #1e40af;
+  --gold: #a47e3c;
+  --gold-light: #c5a572;
+  --gold-pale: #e8d9ba;
+  --ink: #111827;
+  --ink-soft: #374151;
+  --gray: #6b7280;
+  --gray-soft: #9ca3af;
+  --line: #d1d5db;
+  --line-soft: #e5e7eb;
+  --surface: #ffffff;
+  --surface-muted: #fafaf9;
+  --surface-warm: #faf8f4;
+  --success: #047857;
+  --warning: #a16207;
+  --danger: #b91c1c;
+
+  --serif: Georgia, 'Times New Roman', 'Liberation Serif', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+}
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: #e5e7eb;
+  padding: 40px 16px;
+}
+
+.skip-link {
+  position: absolute; top: -40px; left: 0;
+  background: var(--navy); color: #fff;
+  padding: 8px 16px; z-index: 999; text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+.document {
+  max-width: 920px;
+  margin: 0 auto;
+  background: var(--surface);
+  box-shadow: 0 20px 60px -20px rgba(15, 39, 68, 0.25);
+}
+
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; color: var(--navy); letter-spacing: -0.01em; }
+
+h1.section-title {
+  font-family: var(--serif);
+  font-size: 36px;
+  color: var(--navy);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--navy);
+  margin: 64px 0 32px;
+  letter-spacing: -0.02em;
+}
+h1.section-title .num {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  display: block;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+h2 { font-size: 24px; margin: 40px 0 16px; }
+h3 { font-size: 18px; margin: 24px 0 12px; color: var(--navy-soft); }
+h4 { font-size: 14px; margin: 16px 0 8px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: 0.1em; }
+
+p { margin: 12px 0; color: var(--ink); max-width: 70ch; }
+p.lead { font-family: var(--serif); font-size: 20px; line-height: 1.5; color: var(--ink-soft); max-width: 60ch; }
+
+strong { color: var(--navy); font-weight: 600; }
+em { color: var(--ink-soft); }
+
+ul, ol { margin: 12px 0 12px 24px; color: var(--ink); }
+ul li, ol li { margin: 8px 0; line-height: 1.55; }
+ul { list-style: none; padding-left: 0; }
+ul li { padding-left: 20px; position: relative; }
+ul li::before { content: '▸'; color: var(--gold); font-weight: 700; position: absolute; left: 0; top: 0; }
+
+/* COVER */
+.cover {
+  background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, var(--navy-soft) 100%);
+  color: #fff;
+  padding: 96px 64px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle at top right, rgba(164, 126, 60, 0.25) 0%, transparent 70%);
+}
+.cover::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+}
+.cover .brand {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  color: var(--gold-light);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+.cover .brand::after {
+  content: '';
+  display: inline-block;
+  width: 60px; height: 1px;
+  background: var(--gold);
+  vertical-align: middle;
+  margin-left: 16px;
+}
+.cover .eyebrow {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--gold-light);
+  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+}
+.cover h1.title {
+  font-family: var(--serif);
+  font-size: 56px;
+  color: #fff;
+  line-height: 1.05;
+  margin: 0 0 24px;
+  letter-spacing: -0.025em;
+  max-width: 16ch;
+}
+.cover .subtitle {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 50ch;
+  margin-bottom: 64px;
+  line-height: 1.5;
+}
+.cover .meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 48px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 600px;
+}
+.meta-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--gold-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 4px;
+  display: block;
+}
+.meta-value { color: #fff; font-weight: 500; font-size: 14px; }
+
+main { padding: 64px 64px 80px; }
+
+/* Section intro */
+.section-intro {
+  border-left: 4px solid var(--gold);
+  padding: 16px 24px;
+  margin: 24px 0 40px;
+  background: var(--surface-warm);
+}
+.section-intro p {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--navy-soft);
+  margin: 0;
+  font-style: italic;
+}
+
+/* Pull quote */
+blockquote {
+  font-family: var(--serif);
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--navy);
+  padding: 24px 32px;
+  margin: 32px 0;
+  position: relative;
+  background: var(--surface-muted);
+  border-left: 3px solid var(--navy);
+}
+blockquote::before {
+  content: '"';
+  position: absolute; top: -20px; left: 16px;
+  font-size: 80px; color: var(--gold);
+  font-family: var(--serif); line-height: 1;
+}
+blockquote p { font-family: var(--serif); color: var(--navy); max-width: none; margin: 0; }
+blockquote cite {
+  display: block; margin-top: 16px;
+  font-style: normal; font-size: 13px;
+  color: var(--gray); font-family: var(--sans);
+}
+
+/* Tables */
+.table-container { margin: 24px 0; border-top: 2px solid var(--navy); border-bottom: 2px solid var(--navy); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+caption {
+  text-align: left; font-family: var(--sans); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--gray); padding: 12px 0; font-weight: 600;
+}
+th {
+  text-align: left; font-family: var(--sans); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--navy); padding: 12px 16px;
+  border-bottom: 1px solid var(--navy); font-weight: 700;
+}
+th.num { text-align: right; }
+td {
+  padding: 12px 16px; border-bottom: 1px solid var(--line-soft);
+  vertical-align: top; color: var(--ink);
+}
+td.num {
+  text-align: right; font-family: var(--mono);
+  font-variant-numeric: tabular-nums; font-size: 13px;
+}
+tr:last-child td { border-bottom: 2px solid var(--navy); }
+tr.total td {
+  background: var(--surface-warm); font-weight: 700;
+  color: var(--navy); border-top: 1px solid var(--navy);
+}
+.pos { color: var(--success); font-weight: 600; }
+.neg { color: var(--danger); font-weight: 600; }
+
+/* KPI Stats */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin: 32px 0;
+  border-top: 2px solid var(--navy);
+  border-bottom: 2px solid var(--navy);
+}
+.stat {
+  padding: 24px 16px;
+  border-right: 1px solid var(--line);
+  text-align: left;
+}
+.stat:last-child { border-right: 0; }
+.stat-label {
+  font-size: 11px; color: var(--gray);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  font-weight: 600; margin-bottom: 8px; line-height: 1.3;
+}
+.stat-value {
+  font-family: var(--serif); font-size: 36px;
+  font-weight: 700; color: var(--navy);
+  line-height: 1; letter-spacing: -0.02em;
+}
+.stat-unit {
+  font-family: var(--sans); font-size: 14px;
+  color: var(--gray); font-weight: 400; margin-left: 4px;
+}
+
+/* Callouts */
+.callout {
+  border-left: 4px solid var(--blue);
+  padding: 20px 24px;
+  margin: 24px 0;
+  background: #f5f7fa;
+}
+.callout--success { border-left-color: var(--success); background: #f0fdf4; }
+.callout--warning { border-left-color: var(--warning); background: #fffbeb; }
+.callout--gold { border-left-color: var(--gold); background: var(--surface-warm); }
+.callout h4 {
+  font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--navy);
+  margin: 0 0 8px; font-weight: 700;
+}
+.callout p { margin: 8px 0; color: var(--ink); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* Two col */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin: 24px 0;
+}
+.two-col h4 {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px; margin-bottom: 16px;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+  margin: 24px 0;
+  border-left: 2px solid var(--navy);
+}
+.timeline-item {
+  position: relative;
+  padding: 16px 0 24px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -40px;
+  top: 22px;
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border: 2px solid var(--navy);
+  border-radius: 50%;
+}
+.timeline-item.done::before { background: var(--success); border-color: var(--success); }
+.timeline-item.now::before {
+  background: var(--gold);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(164, 126, 60, 0.25);
+}
+.timeline-item.future::before { background: #fff; }
+.timeline-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.timeline-item.done .timeline-label { color: var(--success); }
+.timeline-title { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+.timeline-desc { color: var(--ink-soft); font-size: 14px; }
+
+/* Side by side comparison */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin: 24px 0;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+}
+.compare > div {
+  padding: 24px;
+  background: var(--surface);
+}
+.compare h4 { color: var(--navy); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.compare .vs-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.compare .big {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 8px 0;
+  line-height: 1;
+}
+.compare .reality { background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; }
+.compare .reality h4, .compare .reality .big { color: #fff; }
+.compare .reality .vs-label { color: var(--gold-light); }
+.compare ul { margin-top: 12px; }
+.compare ul li { font-size: 13px; padding-left: 16px; }
+.compare ul li::before { content: '✓'; color: var(--success); }
+.compare .reality ul li::before { color: var(--gold-light); }
+
+/* Print hint */
+.print-hint {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--gold);
+  color: var(--navy-deep);
+  text-align: center;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.print-hint kbd {
+  background: var(--navy-deep);
+  color: var(--gold);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+
+/* Big stat boxes */
+.big-stat {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color: #fff;
+  padding: 40px 32px;
+  margin: 32px 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.big-stat::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(164, 126, 60, 0.2) 0%, transparent 70%);
+}
+.big-stat .label {
+  font-size: 12px;
+  color: var(--gold-light);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.big-stat .value {
+  font-family: var(--serif);
+  font-size: 72px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin: 8px 0;
+}
+.big-stat .desc {
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 16px;
+  font-style: italic;
+  font-family: var(--serif);
+  font-size: 16px;
+}
+
+/* Footer */
+.footer {
+  background: var(--navy-deep);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 40px 64px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.8;
+}
+.footer strong { color: var(--gold-light); }
+
+/* Print */
+@page {
+  size: A4;
+  margin: 18mm 15mm 20mm 15mm;
+}
+@media print {
+  html, body { background: #fff; padding: 0; }
+  .document { box-shadow: none; max-width: 100%; }
+  .print-hint, .skip-link { display: none !important; }
+  main { padding: 40px 32px 48px; }
+  .cover { padding: 64px 40px 48px; page-break-after: always; }
+  h1.section-title { page-break-before: always; margin-top: 0; }
+  h1.section-title:first-of-type { page-break-before: avoid; }
+  h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  table, .callout, blockquote, .stat, .timeline-item, .two-col, .section-intro, .compare, .big-stat {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  a { color: var(--blue); text-decoration: none; }
+}
+
+@media (max-width: 768px) {
+  body { padding: 0; }
+  main { padding: 32px 24px; }
+  .cover { padding: 64px 24px 48px; }
+  .cover h1.title { font-size: 36px; }
+  .cover .subtitle { font-size: 16px; }
+  .cover .meta-grid { grid-template-columns: 1fr; }
+  h1.section-title { font-size: 26px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid .stat:nth-child(2) { border-right: 0; }
+  .stats-grid .stat:nth-child(1),
+  .stats-grid .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .two-col, .compare { grid-template-columns: 1fr; gap: 16px; }
+  .big-stat .value { font-size: 48px; }
+  .footer { padding: 32px 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<div class="print-hint" role="status">
+  📄 Para salvar como PDF: <kbd>Ctrl</kbd> + <kbd>P</kbd> · A4 · Margens padrão · Ative "Gráficos de fundo"
+</div>
+
+<article class="document" lang="pt-BR">
+
+  <!-- ━━━ CAPA ━━━ -->
+  <header class="cover">
+    <p class="brand">YNTHEGRA</p>
+    <p class="eyebrow">Status estratégico do projeto · Abril/2026</p>
+    <h1 class="title">SISTEX:<br>onde estamos<br>e para onde vamos</h1>
+    <p class="subtitle">Transparência total sobre os 60 dias de construção, a complexidade do que foi entregue e o cronograma concreto dos próximos 30 dias até a Ferstex estar plenamente operacional.</p>
+    <div class="meta-grid">
+      <div>
+        <span class="meta-label">Apresentado a</span>
+        <span class="meta-value">Stenio · Ferstex</span>
+      </div>
+      <div>
+        <span class="meta-label">Apresentado por</span>
+        <span class="meta-value">Erick &amp; Rian · YNTHEGRA</span>
+      </div>
+      <div>
+        <span class="meta-label">Data</span>
+        <span class="meta-value">28 de abril de 2026</span>
+      </div>
+      <div>
+        <span class="meta-label">Propósito</span>
+        <span class="meta-value">Alinhamento de expectativas e parceria estratégica</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- ━━━ SEÇÃO 1 — CONTEXTO ━━━ -->
+    <section aria-labelledby="sec-contexto">
+      <h1 id="sec-contexto" class="section-title"><span class="num">Seção 1</span>Antes de tudo, transparência</h1>
+
+      <p class="lead">Este documento existe porque a confiança entre Ferstex e YNTHEGRA é mais valiosa do que qualquer prazo. Antes de mostrar números, queremos reconhecer que a tua frustração faz sentido — e explicar honestamente como chegamos aqui.</p>
+
+      <blockquote>
+        <p>O SISTEX começou como "um sistema pra organizar pedidos da Ferstex". Mas no caminho, descobrimos juntos que pra resolver a tua dor de verdade, não dava pra fazer um sistema simples. Tinha que ser uma plataforma.</p>
+        <cite>— Posicionamento honesto</cite>
+      </blockquote>
+
+      <h2>O que esperamos desta conversa</h2>
+      <ul>
+        <li><strong>Transparência</strong> sobre o que foi feito nestes 60 dias</li>
+        <li><strong>Realismo</strong> sobre a complexidade do que está sendo construído</li>
+        <li><strong>Compromisso</strong> com cronograma concreto dos próximos 30 dias</li>
+        <li><strong>Alinhamento</strong> sobre como otimizar nossa parceria daqui pra frente</li>
+      </ul>
+    </section>
+
+    <!-- ━━━ SEÇÃO 2 — POR QUE LEVOU 60 DIAS ━━━ -->
+    <section aria-labelledby="sec-tempo">
+      <h1 id="sec-tempo" class="section-title"><span class="num">Seção 2</span>Por que o SISTEX ainda não está nas tuas mãos</h1>
+
+      <div class="section-intro">
+        <p>Quatro razões honestas, sem desculpas, que explicam onde estamos hoje.</p>
+      </div>
+
+      <h3>1 · O escopo cresceu naturalmente</h3>
+      <p>Quando a gente começou, falávamos em organizar pedidos. Mas pra resolver de verdade a operação da Ferstex, era preciso integrar Shopify, Mercado Livre, Shopee, Mercado Pago, Bling e Melhor Envio. Era preciso suportar não só a Ferstex, mas vários fornecedores no mesmo sistema. Era preciso garantir segurança bancária pra proteger transações reais. <strong>O que era uma planilha avançada virou uma plataforma SaaS multi-tenant enterprise.</strong></p>
+
+      <h3>2 · Somos sócios iniciantes em programação</h3>
+      <p>Eu e o Erick nunca havíamos construído um SaaS antes. Cada decisão técnica precisou ser estudada, testada e validada antes de ser tomada. Aprendemos durante o processo a operar ferramentas profissionais como Lovable, Cursor e Claude Code — investimento de aprendizado que custou tempo no curto prazo, mas que <strong>garante que somos donos absolutos do conhecimento do produto</strong>. Não dependemos de ninguém pra manter ou evoluir o SISTEX.</p>
+
+      <h3>3 · Auditoria de segurança identificou 10 vulnerabilidades críticas</h3>
+      <p>Há uma semana, executamos uma auditoria completa do código gerado e identificamos 10 falhas que, se tivessem ido para produção, poderiam causar fraude financeira, vazamento de dados (LGPD) ou processo judicial. <strong>Corrigir tudo isso levou um dia inteiro de trabalho focado.</strong> Foi melhor um dia a mais de obra do que um processo a mais de prejuízo.</p>
+
+      <h3>4 · Demandas operacionais da Ferstex absorveram parte do nosso tempo</h3>
+      <p>Esse ponto a gente quer dividir contigo, sem culpa, mas com honestidade. A relação próxima entre nossos times naturalmente gerou um fluxo de demandas operacionais cotidianas. Estimamos que isso reduziu em pelo menos <strong>30% o tempo dedicado ao desenvolvimento</strong>. Não é crítica — é um aprendizado de gestão para os três.</p>
+
+      <div class="callout callout--gold">
+        <h4>Proposta de ajuste para os próximos 30 dias</h4>
+        <p>Sugerimos nomear uma pessoa de confiança da Ferstex como ponto de contato operacional, para que tu possas focar em estratégia e nós no desenvolvimento. Check-ins semanais de 30 minutos para tu acompanhares progresso real e decidir comigo qualquer ajuste de rumo.</p>
+      </div>
+    </section>
+
+    <!-- ━━━ SEÇÃO 3 — A COMPLEXIDADE ━━━ -->
+    <section aria-labelledby="sec-complexidade">
+      <h1 id="sec-complexidade" class="section-title"><span class="num">Seção 3</span>O tamanho real do SISTEX</h1>
+
+      <p>O SISTEX que estamos construindo é dimensionalmente diferente do que parecia originalmente. Para contextualizar:</p>
+
+      <div class="stats-grid" role="group" aria-label="Indicadores de complexidade">
+        <div class="stat">
+          <div class="stat-label">Telas funcionais</div>
+          <div class="stat-value">48</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Custom hooks</div>
+          <div class="stat-value">36</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Edge functions</div>
+          <div class="stat-value">27<span class="stat-unit">+</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Tabelas no banco</div>
+          <div class="stat-value">58</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Integrações externas</div>
+          <div class="stat-value">7</div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Migrations SQL</div>
+          <div class="stat-value">40<span class="stat-unit">+</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Commits no histórico</div>
+          <div class="stat-value">444<span class="stat-unit">+</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Tempo de construção</div>
+          <div class="stat-value">60<span class="stat-unit">dias</span></div>
+        </div>
+      </div>
+
+      <h2>Comparação justa de escopo</h2>
+
+      <div class="compare">
+        <div>
+          <p class="vs-label">Imaginário inicial</p>
+          <h4>Sistema simples de pedidos</h4>
+          <div class="big">2 a 3 sem.</div>
+          <ul>
+            <li>Lista de pedidos</li>
+            <li>Cadastro de produtos</li>
+            <li>Relatório básico</li>
+            <li>Sem integrações</li>
+            <li>Sem multi-tenant</li>
+          </ul>
+        </div>
+        <div class="reality">
+          <p class="vs-label">SISTEX real</p>
+          <h4>Plataforma SaaS multi-tenant</h4>
+          <div class="big">6 a 9 meses</div>
+          <ul>
+            <li>7 integrações externas (Shopify, ML, Shopee, MP, Bling, ME, Stripe)</li>
+            <li>Multi-tenant (suporta N fornecedores)</li>
+            <li>Pagamento recorrente</li>
+            <li>Segurança nível bancário</li>
+            <li>Auditoria fiscal completa</li>
+            <li>Pipeline automatizado de pedidos</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>O sistema que estamos entregando é equivalente a uma versão customizada de Shopify Plus combinada com ERP especializado e gateway de pagamento — uma categoria de produto que normalmente custa <strong>R$ 80 mil a R$ 500 mil</strong> e leva mais de meio ano para ficar pronto.</p>
+    </section>
+
+    <!-- ━━━ SEÇÃO 4 — VALOR DE MERCADO ━━━ -->
+    <section aria-labelledby="sec-valor">
+      <h1 id="sec-valor" class="section-title"><span class="num">Seção 4</span>O custo real do que foi construído</h1>
+
+      <p>Para que tenhas uma referência objetiva: este é o custo que a Ferstex teria se contratasse uma equipe tradicional para construir o mesmo SISTEX do zero.</p>
+
+      <div class="table-container">
+        <table>
+          <caption>Composição do custo de mercado para construir o SISTEX</caption>
+          <thead>
+            <tr>
+              <th scope="col">Profissional</th>
+              <th scope="col" class="num">Remuneração mensal</th>
+              <th scope="col" class="num">Meses</th>
+              <th scope="col" class="num">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Tech Lead / Arquiteto sênior</td><td class="num">R$ 25.000</td><td class="num">3</td><td class="num">R$ 75.000</td></tr>
+            <tr><td>Desenvolvedor Full-stack sênior</td><td class="num">R$ 20.000</td><td class="num">5</td><td class="num">R$ 100.000</td></tr>
+            <tr><td>Desenvolvedor Backend</td><td class="num">R$ 18.000</td><td class="num">3</td><td class="num">R$ 54.000</td></tr>
+            <tr><td>Designer UX/UI</td><td class="num">R$ 15.000</td><td class="num">2</td><td class="num">R$ 30.000</td></tr>
+            <tr><td>QA + DevOps</td><td class="num">R$ 12.000</td><td class="num">2</td><td class="num">R$ 24.000</td></tr>
+            <tr><td>Gerência de projeto</td><td class="num">R$ 15.000</td><td class="num">4</td><td class="num">R$ 60.000</td></tr>
+            <tr><td>Infraestrutura e ferramentas</td><td class="num">—</td><td class="num">—</td><td class="num">R$ 15.000</td></tr>
+            <tr class="total"><td>Custo total de mercado</td><td class="num">—</td><td class="num">6 a 9 meses</td><td class="num">R$ 358.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="big-stat">
+        <p class="label">Valor de mercado do SISTEX construído</p>
+        <p class="value">R$ 358.000</p>
+        <p class="desc">Construído por dois sócios iniciantes em 60 dias, com investimento estratégico em ferramentas de IA avançadas.</p>
+      </div>
+
+      <div class="callout callout--success">
+        <h4>O que isso significa para a Ferstex</h4>
+        <p>Quando a gente fala em <strong>licença vitalícia de R$ 60.000</strong>, isso representa <strong>17% do custo de mercado</strong> que a Ferstex teria se construísse internamente. E ainda assim, a Ferstex tem acesso a uma plataforma que continua evoluindo — sem precisar contratar e gerenciar equipe técnica.</p>
+      </div>
+    </section>
+
+    <!-- ━━━ SEÇÃO 5 — STATUS ATUAL ━━━ -->
+    <section aria-labelledby="sec-status">
+      <h1 id="sec-status" class="section-title"><span class="num">Seção 5</span>O que já está pronto e funcionando</h1>
+
+      <p>O SISTEX não está em "estágio inicial" — está em <strong>produção real</strong>, no ar, em <code>portalsistex.com</code>. Os 12 blocos abaixo já foram entregues, testados e validados:</p>
+
+      <div class="table-container">
+        <table>
+          <caption>12 blocos funcionais já entregues</caption>
+          <thead>
+            <tr>
+              <th scope="col" style="width: 60px">#</th>
+              <th scope="col">Funcionalidade</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="num">1</td><td>SKU Matching (algoritmo de 6 níveis)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">2</td><td>Webhook Shopify (recebe pedidos automaticamente)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">3</td><td>Configurações (Mercado Pago, ViaCEP, Bling, frete)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">4</td><td>Sistema de Assinatura Stripe (trial 10 dias, R$130/mês)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">5</td><td>Controle de acesso por role</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">6</td><td>Catálogo Ferstex e pedido direto</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">7</td><td>Onboarding de revendedores (wizard 4 passos)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">8</td><td>Estados vazios e feedback ao usuário</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">9</td><td>Dashboard administrativo Ferstex (métricas e gráficos)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">10</td><td>Verificação de qualidade pré-lançamento</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">11</td><td>Motor de Produção (relatório consolidado de pedidos)</td><td class="pos">Pronto</td></tr>
+            <tr><td class="num">12</td><td>Super Admin YNTHEGRA (painel multi-tenant)</td><td class="pos">Pronto</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Bônus: segurança nível bancário implementada</h3>
+      <p>Além dos 12 blocos, foram entregues 9 commits adicionais de segurança que protegem a Ferstex e seus drops contra:</p>
+      <ul>
+        <li>Webhooks falsos (proteção HMAC em todos os endpoints)</li>
+        <li>SQL injection (validação rigorosa de inputs)</li>
+        <li>Vazamento entre tenants (Row-Level Security em todas as tabelas)</li>
+        <li>Tokens em texto puro (criptografia AES-GCM)</li>
+        <li>Cobranças duplicadas (chave de idempotência ponta a ponta)</li>
+        <li>Replay attacks (validação de timestamp em webhooks)</li>
+        <li>Race conditions financeiras (locks transacionais)</li>
+        <li>Trilha de auditoria fiscal (correlation_id + trace_id)</li>
+      </ul>
+    </section>
+
+    <!-- ━━━ SEÇÃO 6 — PRÓXIMOS 30 DIAS ━━━ -->
+    <section aria-labelledby="sec-cronograma">
+      <h1 id="sec-cronograma" class="section-title"><span class="num">Seção 6</span>Cronograma concreto · Próximos 30 dias</h1>
+
+      <div class="section-intro">
+        <p>A partir de hoje, 28 de abril, este é o caminho até a Ferstex estar plenamente operacional com drops pagantes.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item now">
+          <p class="timeline-label">Semana 1 · 28/abr a 04/mai</p>
+          <p class="timeline-title">Bloco 13 · Identidade visual Ferstex</p>
+          <p class="timeline-desc">White-label completo. Os drops da Ferstex verão a marca Ferstex no sistema, não YNTHEGRA. Domínio personalizado, cores, logotipo.</p>
+        </div>
+
+        <div class="timeline-item future">
+          <p class="timeline-label">Semana 1 · 28/abr a 04/mai</p>
+          <p class="timeline-title">Bloco 14 · Sistema de convite de drops</p>
+          <p class="timeline-desc">Ferstex consegue cadastrar e convidar drops em poucos cliques, com link mágico por email.</p>
+        </div>
+
+        <div class="timeline-item future">
+          <p class="timeline-label">Semana 2 · 05 a 11/mai</p>
+          <p class="timeline-title">Configuração final do Stripe e secrets de integração</p>
+          <p class="timeline-desc">Ativação do gateway de pagamento real, chaves HMAC dos marketplaces (Mercado Pago, Mercado Livre, Shopee, Melhor Envio).</p>
+        </div>
+
+        <div class="timeline-item future">
+          <p class="timeline-label">Semana 2 · 05 a 11/mai</p>
+          <p class="timeline-title">Templates de e-mail transacional</p>
+          <p class="timeline-desc">Comunicação profissional com revendedores: confirmação, recuperação de senha, novo pedido, etc.</p>
+        </div>
+
+        <div class="timeline-item future">
+          <p class="timeline-label">Semanas 3 e 4 · 12 a 25/mai</p>
+          <p class="timeline-title">Beta com 3 a 5 drops Ferstex</p>
+          <p class="timeline-desc">Validação real com volume de teste. Ajustes finos baseados em feedback dos primeiros usuários reais.</p>
+        </div>
+
+        <div class="timeline-item future">
+          <p class="timeline-label">Final do mês · 26 a 28/mai</p>
+          <p class="timeline-title">Lançamento oficial · Operação plena</p>
+          <p class="timeline-desc">Todos os drops Ferstex migrados para o SISTEX. YNTHEGRA passa a operar a infraestrutura, Ferstex foca em vender e produzir.</p>
+        </div>
+      </div>
+
+      <div class="callout callout--gold">
+        <h4>Compromisso de transparência</h4>
+        <p>Este cronograma é <strong>realista, não otimista</strong>. Cada milestone tem data e a YNTHEGRA assume publicamente o compromisso de check-ins semanais com a Ferstex para você acompanhar progresso e participar das decisões.</p>
+      </div>
+    </section>
+
+    <!-- ━━━ SEÇÃO 7 — REPOSICIONAMENTO ━━━ -->
+    <section aria-labelledby="sec-parceria">
+      <h1 id="sec-parceria" class="section-title"><span class="num">Seção 7</span>Convite à parceria estratégica</h1>
+
+      <blockquote>
+        <p>A Ferstex não é nosso primeiro cliente. A Ferstex é nossa parceira fundadora. O SISTEX existe porque tu acreditaste antes de existir produto pra mostrar.</p>
+        <cite>— Posicionamento estratégico</cite>
+      </blockquote>
+
+      <p class="lead">Pra reconhecer essa contribuição e blindar a relação contra qualquer atrito futuro, queremos te propor três coisas:</p>
+
+      <div class="two-col">
+        <div>
+          <h4>1 · Conselho Estratégico</h4>
+          <p>Reuniões quinzenais de 30 minutos onde apresentamos o que vem nas próximas 2 semanas e tu opinas sobre prioridades. Isso transforma a Ferstex em <strong>co-fundadora do produto</strong>, não cliente esperando entrega.</p>
+        </div>
+        <div>
+          <h4>2 · Ponto de contato dedicado</h4>
+          <p>Sugerimos que tu nomees uma pessoa de confiança da Ferstex pra ser nosso interlocutor operacional cotidiano. Isso te libera pra focar em estratégia e nos libera pra acelerar o desenvolvimento.</p>
+        </div>
+        <div>
+          <h4>3 · Status semanal escrito</h4>
+          <p>Toda quinta-feira, um relatório de uma página com o que foi feito na semana, o que vem na próxima e quaisquer riscos identificados. Sem reuniões obrigatórias — apenas transparência.</p>
+        </div>
+        <div>
+          <h4>4 · Case de sucesso público</h4>
+          <p>Quando a Ferstex estiver plenamente operacional no SISTEX, queremos transformar essa jornada em case de venda para outros fornecedores. <strong>A Ferstex será nossa principal referência de mercado.</strong></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ━━━ SEÇÃO 8 — FECHAMENTO ━━━ -->
+    <section aria-labelledby="sec-fechamento">
+      <h1 id="sec-fechamento" class="section-title"><span class="num">Seção 8</span>O que pedimos e o que nos comprometemos</h1>
+
+      <div class="two-col">
+        <div>
+          <h4>Pedimos à Ferstex</h4>
+          <ul>
+            <li>Confiança renovada por mais 30 dias com cronograma público</li>
+            <li>Indicação de ponto de contato operacional</li>
+            <li>Disponibilidade para check-ins semanais de 30 minutos</li>
+            <li>Indicação de 3 a 5 drops para o beta</li>
+            <li>Honestidade total sobre qualquer dúvida ou frustração</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Nos comprometemos a entregar</h4>
+          <ul>
+            <li>Os 4 marcos do cronograma das próximas 4 semanas</li>
+            <li>Status semanal escrito (toda quinta-feira)</li>
+            <li>Resposta a dúvidas em até 24 horas úteis</li>
+            <li>SISTEX plenamente operacional até 28 de maio</li>
+            <li>Manutenção contínua e evolução do produto sem custo adicional além da licença + manutenção acordadas</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="big-stat">
+        <p class="label">Compromisso da YNTHEGRA</p>
+        <p class="value">28 / mai</p>
+        <p class="desc">Data em que a Ferstex estará plenamente operacional no SISTEX, com drops pagantes e operação fluindo.</p>
+      </div>
+
+      <h2>Pergunta final</h2>
+      <p class="lead">Stenio, o que tu precisas hoje para sair desta reunião confiante de que vale a pena seguir construindo isso conosco?</p>
+
+      <p>Nós queremos te ouvir. O que aconteceu nos últimos 60 dias é a parte mais difícil de qualquer projeto — a fundação. Daqui pra frente é só montar o que está em cima dela. E vai rápido, com data marcada e tu acompanhando de perto.</p>
+
+      <blockquote>
+        <p>Eu e o Erick não estamos construindo o SISTEX pra te vender uma assinatura. Estamos construindo a infraestrutura digital da Ferstex pelos próximos 10 anos — e tu és nosso primeiro case de sucesso.</p>
+        <cite>— Erick &amp; Rian, fundadores YNTHEGRA</cite>
+      </blockquote>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>YNTHEGRA</strong> · Infraestrutura tecnológica para fornecedores brasileiros</p>
+    <p>Documento confidencial · Apresentação Ferstex · 28 de abril de 2026</p>
+    <p>portalsistex.com</p>
+  </footer>
+
+</article>
+
+</body>
+</html>

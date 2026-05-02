@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SISTEX — Migração Supabase: Fase 1</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #1a1a1a;
+    background: #f6f5f0;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root {
+    --navy: #0f2744;
+    --navy-light: #1a3a5c;
+    --gold: #a47e3c;
+    --cream: #f6f5f0;
+    --paper: #ffffff;
+    --muted: #5a5a5a;
+    --border: #d4cfc4;
+    --success: #2d6e3e;
+    --warning: #b8742a;
+    --danger: #a83234;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 48px 56px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  h1 { font-size: 2rem; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 6px; }
+  h2 { font-size: 1.375rem; color: var(--navy); margin: 36px 0 14px; padding-bottom: 8px; border-bottom: 2px solid var(--gold); }
+  h3 { font-size: 1.0625rem; color: var(--navy); margin: 18px 0 6px; }
+  h4 { font-size: 0.9375rem; color: var(--navy-light); margin: 12px 0 4px; }
+  p { margin-bottom: 10px; }
+  strong { color: var(--navy); font-weight: 600; }
+  a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+
+  .doc-header {
+    border-bottom: 3px solid var(--navy);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  .doc-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 10px;
+    font-size: 0.8125rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .doc-meta .badge {
+    background: var(--navy);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 600;
+    font-size: 0.7rem;
+  }
+  .doc-subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin: 20px 0 28px;
+    border: 1px solid var(--border);
+  }
+  .stat {
+    background: var(--cream);
+    padding: 14px;
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .stat-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .step {
+    display: flex;
+    gap: 14px;
+    margin: 16px 0;
+    padding: 16px 18px;
+    background: var(--cream);
+    border-left: 4px solid var(--gold);
+  }
+  .step-number {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+  }
+  .step-content { flex: 1; }
+  .step-content p:last-child { margin-bottom: 0; }
+
+  code {
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    font-size: 0.875rem;
+    background: #ece8df;
+    padding: 2px 6px;
+    border-radius: 2px;
+    color: var(--navy);
+    word-break: break-all;
+  }
+  pre {
+    background: #1a1a1a;
+    color: #e8e6e0;
+    padding: 14px 18px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    border-radius: 2px;
+    border-left: 3px solid var(--gold);
+  }
+  pre code { background: transparent; color: inherit; padding: 0; }
+
+  .box {
+    border: 1px solid var(--border);
+    background: var(--cream);
+    padding: 16px 20px;
+    margin: 14px 0;
+    border-left: 4px solid var(--gold);
+  }
+  .box.warning { border-left-color: var(--warning); background: #fdf7ec; }
+  .box.danger { border-left-color: var(--danger); background: #faecec; }
+  .box.success { border-left-color: var(--success); background: #ecf5ee; }
+  .box-title {
+    font-weight: 700;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    color: var(--navy);
+  }
+  .box.warning .box-title { color: var(--warning); }
+  .box.danger .box-title { color: var(--danger); }
+  .box.success .box-title { color: var(--success); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 0.875rem;
+  }
+  th {
+    background: var(--navy);
+    color: #fff;
+    text-align: left;
+    padding: 9px 12px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--cream); }
+
+  ul, ol { padding-left: 22px; margin: 6px 0 12px; }
+  li { margin-bottom: 4px; }
+
+  .secret-template {
+    background: #1a1a1a;
+    color: #e8e6e0;
+    padding: 16px 20px;
+    border-radius: 2px;
+    border-left: 3px solid var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.8;
+    user-select: all;
+  }
+  .secret-template .label { color: #c89952; }
+  .secret-template .placeholder { color: #888; font-style: italic; }
+
+  .doc-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8125rem;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .page { box-shadow: none; padding: 20px 30px; }
+    h2, .step { page-break-inside: avoid; }
+    @page { size: A4; margin: 1.5cm; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="doc-header">
+    <div class="doc-meta">
+      <span>YNTHEGRA × SISTEX · Migração Supabase</span>
+      <span class="badge">Fase 1 / 3</span>
+    </div>
+    <h1>Criar projeto Supabase próprio</h1>
+    <p class="doc-subtitle">Tirar a infra de dependência do Lovable e colocar em conta sua absoluta</p>
+    <div class="doc-meta" style="margin-top: 14px;">
+      <span>Quarta · 28 abr 2026</span>
+      <span>Sua execução: 10 min · Minha execução: 30 min</span>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-value">45</div><div class="stat-label">Migrations a aplicar</div></div>
+    <div class="stat"><div class="stat-value">38</div><div class="stat-label">Edge Functions a deploy</div></div>
+    <div class="stat"><div class="stat-value">5</div><div class="stat-label">Credenciais a coletar</div></div>
+    <div class="stat"><div class="stat-value">7 dias</div><div class="stat-label">Até demo Stenio</div></div>
+  </div>
+
+  <div class="box success">
+    <div class="box-title">✓ O que ganhamos com a migração</div>
+    <ul style="margin-bottom: 0;">
+      <li><strong>Independência total</strong> do Lovable — você é dona do projeto Supabase</li>
+      <li><strong>Acesso direto</strong> via terminal (eu opero por você)</li>
+      <li><strong>Credibilidade</strong> pro Stenio — infra na sua empresa, não plataforma terceira</li>
+      <li><strong>Sem perda</strong> de código (45 migrations + 38 functions estão no Git)</li>
+    </ul>
+  </div>
+
+  <h2>Suas 5 ações no Supabase Dashboard</h2>
+
+  <div class="step">
+    <div class="step-number">1</div>
+    <div class="step-content">
+      <h4>Logar no Supabase Dashboard</h4>
+      <p>URL: <a href="https://supabase.com/dashboard">https://supabase.com/dashboard</a></p>
+      <p>Clica em <strong>"Continue with GitHub"</strong> (em aba anônima do Chrome se ainda der erro de OAuth state).</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-number">2</div>
+    <div class="step-content">
+      <h4>Criar Organization (se não existir uma sua)</h4>
+      <p>Quando entrar, você pode estar dentro de uma org herdada do Lovable. Clica no nome da org no topo (canto superior esquerdo) e procura <strong>"New organization"</strong>.</p>
+      <ul>
+        <li>Name: <code>YNTHEGRA</code></li>
+        <li>Type: <code>Personal</code> (vai mudar pra Team se crescer)</li>
+        <li>Plan: <code>Free</code> (sobe quando precisar)</li>
+      </ul>
+      <p>Se já tiver uma org sua, pula para o passo 3.</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-number">3</div>
+    <div class="step-content">
+      <h4>Criar Project</h4>
+      <p>Dentro da sua organization, clica em <strong>"New project"</strong> e configura:</p>
+      <table>
+        <tbody>
+          <tr><td><strong>Name</strong></td><td><code>sistex</code></td></tr>
+          <tr><td><strong>Database password</strong></td><td>Gera senha forte (use 1Password) — <strong>SALVE com cuidado</strong></td></tr>
+          <tr><td><strong>Region</strong></td><td><code>South America (São Paulo)</code></td></tr>
+          <tr><td><strong>Pricing plan</strong></td><td><code>Free</code></td></tr>
+        </tbody>
+      </table>
+      <p>Clica em <strong>"Create new project"</strong>. Aguarda ~2 minutos pelo provisionamento (banco, API, edge runtime).</p>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-number">4</div>
+    <div class="step-content">
+      <h4>Coletar 4 credenciais do projeto</h4>
+      <p>Quando terminar de provisionar, vai em <strong>Project Settings → API</strong>. Você vai precisar copiar 4 valores:</p>
+      <table>
+        <tbody>
+          <tr><td><strong>Project Reference ID</strong></td><td>tipo <code>xyzabc123def456</code> (string curta)</td></tr>
+          <tr><td><strong>Project URL</strong></td><td>tipo <code>https://xyzabc123def456.supabase.co</code></td></tr>
+          <tr><td><strong>anon (public)</strong></td><td>JWT começando com <code>eyJ...</code></td></tr>
+          <tr><td><strong>service_role</strong></td><td>JWT começando com <code>eyJ...</code> — <strong style="color: var(--danger)">SECRETO</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="step-number">5</div>
+    <div class="step-content">
+      <h4>Gerar Personal Access Token</h4>
+      <p>URL direta: <a href="https://supabase.com/dashboard/account/tokens">https://supabase.com/dashboard/account/tokens</a></p>
+      <ol>
+        <li>Clica em <strong>"Generate new token"</strong></li>
+        <li>Name: <code>claude-code-cli</code></li>
+        <li>Copia o token que aparece — começa com <code>sbp_...</code></li>
+        <li>⚠ Você só vai ver esse token UMA VEZ. Salve no 1Password.</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>Como me passar as 6 credenciais</h2>
+
+  <p>Cola aqui no chat do Claude Code, exatamente neste formato (preserva estrutura — facilita meu parse):</p>
+
+  <div class="secret-template">
+<span class="label">PROJECT_REF</span>=<span class="placeholder">xyzabc123def456</span>
+<span class="label">PROJECT_URL</span>=<span class="placeholder">https://xyzabc123def456.supabase.co</span>
+<span class="label">ANON_KEY</span>=<span class="placeholder">eyJhbGc...</span>
+<span class="label">SERVICE_ROLE_KEY</span>=<span class="placeholder">eyJhbGc...</span>
+<span class="label">PAT</span>=<span class="placeholder">sbp_...</span>
+<span class="label">DB_PASSWORD</span>=<span class="placeholder">a-senha-que-voce-criou-no-passo-3</span>
+  </div>
+
+  <div class="box danger" style="margin-top: 20px;">
+    <div class="box-title">⚠ Sobre os secrets que você vai compartilhar</div>
+    <ul style="margin-bottom: 0;">
+      <li><strong>SERVICE_ROLE_KEY</strong> — chave admin do banco. Nunca compartilhe em outro lugar.</li>
+      <li><strong>PAT</strong> — acesso administrativo total. Após eu terminar o Dia 1, <strong>revogue</strong> em <a href="https://supabase.com/dashboard/account/tokens">Account → Tokens</a>.</li>
+      <li><strong>DB_PASSWORD</strong> — senha do banco. Salve no 1Password antes de me mandar.</li>
+      <li>O chat do Claude Code é seguro pra essas trocas, mas <strong>nunca cole esses valores em e-mail, WhatsApp, ou outro chat público</strong>.</li>
+    </ul>
+  </div>
+
+  <h2>O que eu faço depois (Fase 2 — vou executando enquanto você coleta)</h2>
+
+  <table>
+    <thead>
+      <tr><th>Etapa</th><th>Comando / Ação</th><th>Tempo</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Linkar CLI</strong> ao novo projeto</td>
+        <td><code>supabase link --project-ref XXX</code></td>
+        <td>~30s</td>
+      </tr>
+      <tr>
+        <td><strong>Aplicar 45 migrations</strong></td>
+        <td><code>supabase db push</code></td>
+        <td>~2 min</td>
+      </tr>
+      <tr>
+        <td><strong>Deploy 38 Edge Functions</strong></td>
+        <td><code>supabase functions deploy</code></td>
+        <td>~10 min</td>
+      </tr>
+      <tr>
+        <td><strong>Setar secrets</strong> (incluindo a master key gerada hoje)</td>
+        <td><code>supabase secrets set</code></td>
+        <td>~30s</td>
+      </tr>
+      <tr>
+        <td><strong>Atualizar .env</strong> local + commit</td>
+        <td><code>git commit</code></td>
+        <td>~1 min</td>
+      </tr>
+      <tr>
+        <td><strong>Atualizar Vercel</strong> com nova URL/keys</td>
+        <td>Vercel CLI ou eu te oriento via UI</td>
+        <td>~3 min</td>
+      </tr>
+      <tr>
+        <td><strong>Smoke test</strong> do webhook Shopify</td>
+        <td><code>node scripts/smoke-test-shopify-webhook.mjs</code></td>
+        <td>~30s</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>O que perdemos (na prática: nada crítico)</h2>
+
+  <table>
+    <thead>
+      <tr><th>Item</th><th>Recuperável?</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Schema (45 migrations)</td><td>✅ Reaplicado a partir do Git</td></tr>
+      <tr><td>Edge Functions (38)</td><td>✅ Redeployadas a partir do Git</td></tr>
+      <tr><td>Configuração (config.toml)</td><td>✅ Idêntica</td></tr>
+      <tr><td>Dados de produção</td><td>⚠️ MVP ainda é só seeds, não tem dados reais</td></tr>
+      <tr><td>Tokens OAuth Bling/Melhor Envio</td><td>❌ Reconectar (1 clique cada)</td></tr>
+      <tr><td>URL do projeto antigo</td><td>❌ Muda — mas nada externo aponta pra ela ainda</td></tr>
+    </tbody>
+  </table>
+
+  <div class="doc-footer">
+    <strong>YNTHEGRA</strong> · SISTEX · Migração Supabase Fase 1 · 28/abr/2026
+  </div>
+
+</div>
+</body>
+</html>

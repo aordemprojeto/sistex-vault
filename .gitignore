@@ -1,0 +1,27 @@
+# Obsidian — estado pessoal de workspace (não sincronizar entre PCs)
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/workspaces.json
+.obsidian/cache
+.obsidian/graph.json
+
+# Lixeira do Obsidian
+.trash/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Backups e temporários
+*.bak
+*.tmp
+*.swp
+*~
+
+# Arquivos sensíveis (caso entrem por engano)
+sistex-secrets-PRODUCAO.txt
+*.env
+*.pem
+*.key
+*.pfx

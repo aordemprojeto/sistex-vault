@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Análise estratégica de precificação do SISTEX — plataforma SaaS multi-tenant YNTHEGRA">
+<meta name="author" content="YNTHEGRA">
+<meta name="robots" content="noindex,nofollow">
+<title>Estratégia de Precificação · SISTEX · YNTHEGRA</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   YNTHEGRA CORPORATE THEME
+   Inspirado em McKinsey Quarterly + The Economist editorial design
+   Foco: LCP otimizado, A11y AA, print-perfect
+═══════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Paleta corporate YNTHEGRA */
+  --navy-deepest: #060f1e;
+  --navy-deep: #0a1629;
+  --navy: #0f2744;
+  --navy-soft: #1a3558;
+  --blue: #1e40af;
+  --blue-hover: #1e3a8a;
+  --gold: #a47e3c;
+  --gold-light: #c5a572;
+  --ink: #111827;
+  --ink-soft: #374151;
+  --gray: #6b7280;
+  --gray-soft: #9ca3af;
+  --line: #d1d5db;
+  --line-soft: #e5e7eb;
+  --surface: #ffffff;
+  --surface-muted: #fafaf9;
+  --surface-warm: #faf8f4;
+  --success: #047857;
+  --warning: #a16207;
+  --danger: #b91c1c;
+
+  /* Typography */
+  --serif: Georgia, 'Times New Roman', 'Liberation Serif', serif;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Scale (1.25 — major third) */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 2.875rem;
+  --text-5xl: 3.625rem;
+
+  /* Spacing */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --sp-24: 6rem;
+}
+
+html { font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-family: var(--sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--ink);
+  background: #e5e7eb;
+  padding: var(--sp-10) var(--sp-4);
+}
+
+/* Skip link (a11y) */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--navy);
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 999;
+  text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+/* Focus visible */
+:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Document shell */
+.document {
+  max-width: 920px;
+  margin: 0 auto;
+  background: var(--surface);
+  box-shadow: 0 20px 60px -20px rgba(15, 39, 68, 0.25);
+}
+
+/* ─── Typography ─── */
+h1, h2, h3, h4 { font-weight: 700; line-height: 1.15; color: var(--navy); letter-spacing: -0.01em; }
+.display { font-family: var(--serif); font-weight: 700; letter-spacing: -0.02em; }
+
+h1.section-title {
+  font-family: var(--serif);
+  font-size: var(--text-4xl);
+  color: var(--navy);
+  padding-bottom: var(--sp-3);
+  border-bottom: 2px solid var(--navy);
+  margin: var(--sp-16) 0 var(--sp-8);
+  letter-spacing: -0.02em;
+}
+h1.section-title .num {
+  font-family: var(--sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: var(--sp-3);
+  text-transform: uppercase;
+}
+
+h2 { font-size: var(--text-2xl); margin: var(--sp-10) 0 var(--sp-4); }
+h3 { font-size: var(--text-lg); margin: var(--sp-6) 0 var(--sp-3); color: var(--navy-soft); }
+h4 { font-size: var(--text-base); margin: var(--sp-4) 0 var(--sp-2); font-weight: 600; color: var(--ink); text-transform: uppercase; letter-spacing: 0.08em; }
+
+p { margin: var(--sp-3) 0; color: var(--ink); max-width: 72ch; }
+p.lead { font-family: var(--serif); font-size: var(--text-xl); line-height: 1.5; color: var(--ink-soft); max-width: 64ch; }
+
+strong { color: var(--navy); font-weight: 600; }
+em { color: var(--ink-soft); }
+
+ul, ol { margin: var(--sp-3) 0 var(--sp-3) var(--sp-6); color: var(--ink); }
+ul li, ol li { margin: var(--sp-2) 0; line-height: 1.55; }
+ul { list-style: none; padding-left: 0; }
+ul li { padding-left: var(--sp-5); position: relative; }
+ul li::before { content: '▸'; color: var(--gold); font-weight: 700; position: absolute; left: 0; top: 0; }
+ol { counter-reset: ol-counter; list-style: none; padding-left: 0; }
+ol li { counter-increment: ol-counter; padding-left: var(--sp-8); position: relative; }
+ol li::before {
+  content: counter(ol-counter, decimal-leading-zero);
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--gold);
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: var(--text-base);
+}
+
+a { color: var(--blue); text-decoration: underline; text-decoration-color: var(--gold); text-underline-offset: 3px; }
+a:hover { color: var(--blue-hover); }
+
+/* ─── COVER ─── */
+.cover {
+  background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, var(--navy-soft) 100%);
+  color: #fff;
+  padding: var(--sp-24) var(--sp-16) var(--sp-20);
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 220px; height: 220px;
+  background: radial-gradient(circle at top right, rgba(164, 126, 60, 0.2) 0%, transparent 70%);
+}
+.cover::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+}
+.cover .brand {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.4em;
+  color: var(--gold-light);
+  text-transform: uppercase;
+  margin-bottom: var(--sp-12);
+}
+.cover .brand::after {
+  content: '';
+  display: inline-block;
+  width: 60px;
+  height: 1px;
+  background: var(--gold);
+  vertical-align: middle;
+  margin-left: var(--sp-4);
+}
+.cover .eyebrow {
+  font-family: var(--serif);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--gold-light);
+  margin-bottom: var(--sp-4);
+  letter-spacing: 0.05em;
+}
+.cover h1.title {
+  font-family: var(--serif);
+  font-size: var(--text-5xl);
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 var(--sp-6);
+  letter-spacing: -0.025em;
+  max-width: 18ch;
+}
+.cover .subtitle {
+  font-family: var(--serif);
+  font-size: var(--text-xl);
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 45ch;
+  margin-bottom: var(--sp-16);
+  line-height: 1.5;
+}
+.cover .meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-6) var(--sp-12);
+  padding-top: var(--sp-10);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  max-width: 600px;
+}
+.meta-item { font-size: var(--text-sm); }
+.meta-label {
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  color: var(--gold-light);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: var(--sp-1);
+  display: block;
+}
+.meta-value {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ─── MAIN CONTENT ─── */
+main { padding: var(--sp-16) var(--sp-16) var(--sp-20); }
+
+/* Section intro */
+.section-intro {
+  border-left: 4px solid var(--gold);
+  padding: var(--sp-4) var(--sp-6);
+  margin: var(--sp-6) 0 var(--sp-10);
+  background: var(--surface-warm);
+}
+.section-intro p { font-family: var(--serif); font-size: var(--text-lg); color: var(--navy-soft); margin: 0; font-style: italic; }
+
+/* Pull quote (editorial) */
+blockquote {
+  font-family: var(--serif);
+  font-size: var(--text-xl);
+  line-height: 1.4;
+  color: var(--navy);
+  padding: var(--sp-6) var(--sp-8);
+  margin: var(--sp-8) 0;
+  position: relative;
+  background: var(--surface-muted);
+  border-left: 3px solid var(--navy);
+}
+blockquote::before {
+  content: '"';
+  position: absolute;
+  top: -20px; left: 16px;
+  font-size: 80px;
+  color: var(--gold);
+  font-family: var(--serif);
+  line-height: 1;
+}
+blockquote p { font-family: var(--serif); color: var(--navy); max-width: none; }
+blockquote cite {
+  display: block;
+  margin-top: var(--sp-4);
+  font-style: normal;
+  font-size: var(--text-sm);
+  color: var(--gray);
+  font-family: var(--sans);
+}
+
+/* ─── TABLES (editorial) ─── */
+.table-container {
+  margin: var(--sp-6) 0;
+  border-top: 2px solid var(--navy);
+  border-bottom: 2px solid var(--navy);
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+caption {
+  text-align: left;
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--gray);
+  padding: var(--sp-3) 0;
+  font-weight: 600;
+}
+th {
+  text-align: left;
+  font-family: var(--sans);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--navy);
+  font-weight: 700;
+}
+th.num { text-align: right; }
+td {
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: top;
+  color: var(--ink);
+}
+td.num {
+  text-align: right;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.9em;
+  letter-spacing: -0.01em;
+}
+tr:last-child td { border-bottom: 2px solid var(--navy); }
+tr.total td {
+  background: var(--surface-warm);
+  font-weight: 700;
+  color: var(--navy);
+  border-top: 1px solid var(--navy);
+}
+.pos { color: var(--success); font-weight: 600; }
+.neg { color: var(--danger); font-weight: 600; }
+.neutral { color: var(--ink-soft); }
+
+/* ─── KPI Stats (editorial style) ─── */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin: var(--sp-8) 0;
+  border-top: 2px solid var(--navy);
+  border-bottom: 2px solid var(--navy);
+}
+.stat {
+  padding: var(--sp-6) var(--sp-4);
+  border-right: 1px solid var(--line);
+  text-align: left;
+}
+.stat:last-child { border-right: 0; }
+.stat-label {
+  font-size: var(--text-xs);
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+  line-height: 1.3;
+}
+.stat-value {
+  font-family: var(--serif);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.stat-unit {
+  font-family: var(--sans);
+  font-size: var(--text-sm);
+  color: var(--gray);
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* ─── Option Cards (3 tiers) ─── */
+.options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-1);
+  margin: var(--sp-8) 0;
+  border: 1px solid var(--navy);
+}
+.option {
+  padding: var(--sp-8) var(--sp-6);
+  background: var(--surface);
+  position: relative;
+}
+.option + .option { border-left: 1px solid var(--navy); }
+.option.featured {
+  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color: #fff;
+}
+.option.featured h4,
+.option.featured .opt-name,
+.option.featured .opt-price { color: #fff; }
+.option.featured .opt-detail { color: rgba(255, 255, 255, 0.8); }
+.option.featured .features li { color: rgba(255, 255, 255, 0.9); }
+.option.featured .features li::before { color: var(--gold-light); }
+.opt-badge {
+  position: absolute;
+  top: -1px; right: -1px;
+  background: var(--gold);
+  color: var(--navy-deep);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: var(--sp-2) var(--sp-4);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.opt-tier {
+  font-size: var(--text-xs);
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+}
+.opt-name {
+  font-family: var(--serif);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: var(--sp-6);
+}
+.opt-price {
+  font-family: var(--serif);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+  margin-bottom: var(--sp-2);
+}
+.opt-price .currency {
+  font-size: var(--text-lg);
+  vertical-align: 28px;
+  margin-right: 2px;
+  font-weight: 400;
+  color: var(--gray);
+}
+.opt-detail {
+  font-size: var(--text-xs);
+  color: var(--gray);
+  margin-bottom: var(--sp-6);
+  min-height: 2.2em;
+}
+.features {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+}
+.features li { padding-left: var(--sp-5); }
+.features li::before { content: '✓'; color: var(--success); font-weight: 700; }
+.features li.off::before { content: '—'; color: var(--gray-soft); }
+.features li.off { color: var(--gray-soft); }
+
+/* ─── Callout boxes ─── */
+.callout {
+  border-left: 4px solid var(--blue);
+  padding: var(--sp-5) var(--sp-6);
+  margin: var(--sp-6) 0;
+  background: #f5f7fa;
+}
+.callout--success { border-left-color: var(--success); background: #f0fdf4; }
+.callout--warning { border-left-color: var(--warning); background: #fffbeb; }
+.callout--danger { border-left-color: var(--danger); background: #fef2f2; }
+.callout h4 {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--navy);
+  margin: 0 0 var(--sp-2);
+  font-weight: 700;
+}
+.callout p { margin: var(--sp-2) 0; color: var(--ink); }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ─── Two column layout ─── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
+  margin: var(--sp-6) 0;
+}
+.two-col > div { padding: var(--sp-5) 0; }
+.two-col h4 {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--sp-2);
+  margin-bottom: var(--sp-4);
+}
+
+/* ─── Data bar (visual comparison) ─── */
+.data-row {
+  display: grid;
+  grid-template-columns: 180px 1fr 100px;
+  align-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--line-soft);
+  font-size: var(--text-sm);
+}
+.data-row .label { font-weight: 500; color: var(--ink-soft); }
+.data-row .bar {
+  position: relative;
+  background: var(--line-soft);
+  height: 10px;
+  border-radius: 0;
+  overflow: hidden;
+}
+.data-row .bar-fill {
+  height: 100%;
+  background: var(--navy);
+}
+.data-row .bar-fill.gold { background: var(--gold); }
+.data-row .bar-fill.success { background: var(--success); }
+.data-row .value {
+  font-family: var(--mono);
+  text-align: right;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+/* ─── Timeline ─── */
+.timeline {
+  position: relative;
+  padding-left: var(--sp-8);
+  margin: var(--sp-6) 0;
+  border-left: 2px solid var(--navy);
+}
+.timeline-item {
+  position: relative;
+  padding: var(--sp-4) 0 var(--sp-6);
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--sp-8) - 8px);
+  top: var(--sp-5);
+  width: 14px; height: 14px;
+  background: var(--gold);
+  border: 2px solid var(--navy);
+  border-radius: 50%;
+}
+.timeline-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: var(--sp-1);
+}
+.timeline-title { font-size: var(--text-base); font-weight: 600; color: var(--navy); margin-bottom: var(--sp-1); }
+.timeline-desc { color: var(--ink-soft); font-size: var(--text-sm); }
+
+/* ─── Signature block ─── */
+.signatures {
+  margin-top: var(--sp-20);
+  padding-top: var(--sp-10);
+  border-top: 2px solid var(--navy);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-12);
+}
+.sig {
+  text-align: center;
+  padding-top: var(--sp-16);
+  border-top: 1px solid var(--ink);
+}
+.sig-name { font-weight: 600; color: var(--navy); font-size: var(--text-base); margin-top: var(--sp-2); }
+.sig-role { font-size: var(--text-xs); color: var(--gray); text-transform: uppercase; letter-spacing: 0.1em; margin-top: var(--sp-1); }
+
+/* ─── Footer ─── */
+.footer {
+  background: var(--navy-deep);
+  color: rgba(255, 255, 255, 0.7);
+  padding: var(--sp-10) var(--sp-16);
+  font-size: var(--text-xs);
+  text-align: center;
+  line-height: 1.8;
+}
+.footer strong { color: var(--gold-light); }
+
+/* ─── Print instructions (screen only) ─── */
+.print-hint {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--gold);
+  color: var(--navy-deep);
+  text-align: center;
+  padding: var(--sp-3) var(--sp-4);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.print-hint kbd {
+  background: var(--navy-deep);
+  color: var(--gold);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: var(--mono);
+  font-size: 0.9em;
+}
+
+/* ─── PRINT STYLES ─── */
+@page {
+  size: A4;
+  margin: 18mm 15mm 20mm 15mm;
+}
+@media print {
+  html, body { background: #fff; padding: 0; }
+  .document { box-shadow: none; max-width: 100%; }
+  .print-hint, .skip-link { display: none !important; }
+  main { padding: var(--sp-10) var(--sp-8) var(--sp-12); }
+  .cover { padding: var(--sp-16) var(--sp-10) var(--sp-12); page-break-after: always; }
+  h1.section-title { page-break-before: always; margin-top: 0; }
+  h1.section-title:first-of-type { page-break-before: avoid; }
+  h2, h3, h4 { page-break-after: avoid; break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+  table, .callout, blockquote, .option, .stat, .timeline-item, .two-col, .section-intro {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .options, .stats-grid { page-break-inside: avoid; }
+  a { color: var(--blue); text-decoration: none; }
+  a::after { content: ''; }
+  .footer { page-break-before: avoid; }
+}
+
+/* ─── Responsive (screen) ─── */
+@media (max-width: 768px) {
+  body { padding: 0; }
+  main { padding: var(--sp-8) var(--sp-6); }
+  .cover { padding: var(--sp-16) var(--sp-6) var(--sp-12); }
+  .cover h1.title { font-size: var(--text-3xl); }
+  .cover .subtitle { font-size: var(--text-base); }
+  .cover .meta-grid { grid-template-columns: 1fr; }
+  h1.section-title { font-size: var(--text-2xl); }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .stats-grid .stat:nth-child(2) { border-right: 0; }
+  .stats-grid .stat:nth-child(1),
+  .stats-grid .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .options { grid-template-columns: 1fr; }
+  .option + .option { border-left: 0; border-top: 1px solid var(--navy); }
+  .two-col { grid-template-columns: 1fr; gap: var(--sp-4); }
+  .data-row { grid-template-columns: 1fr; gap: var(--sp-1); }
+  .signatures { grid-template-columns: 1fr; }
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+<div class="print-hint" role="status" aria-live="polite">
+  📄 Para salvar como PDF: aperte <kbd>Ctrl</kbd> + <kbd>P</kbd> → "Salvar como PDF" · Layout A4 · Margens padrão · <strong>Ativar "Gráficos de fundo"</strong>
+</div>
+
+<article class="document" lang="pt-BR">
+
+  <!-- ━━━━━━━━━━━━━━━━━━━ CAPA ━━━━━━━━━━━━━━━━━━━ -->
+  <header class="cover">
+    <p class="brand">YNTHEGRA</p>
+    <p class="eyebrow">Análise estratégica · 2026</p>
+    <h1 class="title">Estratégia de<br>Precificação<br>do SISTEX</h1>
+    <p class="subtitle">Venda vitalícia à Ferstex como parceira-piloto e modelo de assinatura recorrente para a escala multi-tenant da plataforma.</p>
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="meta-label">Classificação</span>
+        <span class="meta-value">Confidencial · Uso interno</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Destinatários</span>
+        <span class="meta-value">Erick &amp; Sócio</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Data</span>
+        <span class="meta-value">22 de abril de 2026</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Versão</span>
+        <span class="meta-value">v2.0 · Rascunho executivo</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ RESUMO EXECUTIVO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-resumo">
+      <h1 id="sec-resumo" class="section-title"><span class="num">Seção 1</span>Resumo executivo</h1>
+
+      <div class="section-intro">
+        <p>Análise estratégica das opções de monetização da plataforma SISTEX, sustentada por benchmarking de mercado, simulação por tamanho de fornecedor e projeção de 36 meses.</p>
+      </div>
+
+      <p class="lead">A YNTHEGRA desenvolveu uma infraestrutura SaaS multi-tenant cujo valor de mercado, se construída por equipe tradicional, ultrapassa R$ 350 mil. Este documento apresenta a estratégia para converter esse ativo em receita recorrente previsível.</p>
+
+      <h2>Síntese das recomendações</h2>
+      <ul>
+        <li><strong>Ferstex (parceira-piloto):</strong> Licença vitalícia de R$ 60.000, acrescida de manutenção mensal de R$ 2.500.</li>
+        <li><strong>Novos fornecedores:</strong> Modelo híbrido. Base de R$ 297/mês, acrescido de R$ 4,90 por pedido processado acima do limite incluso, com teto (CAP) de R$ 2.500/mês.</li>
+        <li><strong>Oferta de lançamento:</strong> Primeiros 20 fornecedores entram com 3 meses gratuitos, seguidos de 9 meses a R$ 197/mês.</li>
+        <li><strong>Projeção consolidada:</strong> Receita anual estimada em R$ 2,9 milhões no terceiro ano de operação.</li>
+      </ul>
+
+      <div class="stats-grid" role="group" aria-label="Indicadores-chave">
+        <div class="stat">
+          <div class="stat-label">Custo real de desenvolvimento</div>
+          <div class="stat-value">R$ 358<span class="stat-unit">mil</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Economia mensal para a Ferstex</div>
+          <div class="stat-value">R$ 15,5<span class="stat-unit">mil</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Licença vitalícia recomendada</div>
+          <div class="stat-value">R$ 60<span class="stat-unit">mil</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Projeção de receita em 3 anos</div>
+          <div class="stat-value">R$ 2,9<span class="stat-unit">milhões</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 2 — CUSTO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-custo">
+      <h1 id="sec-custo" class="section-title"><span class="num">Seção 2</span>Custo real de desenvolvimento</h1>
+
+      <p>Para precificar com base em valor de mercado, estabelecemos o custo que a Ferstex — ou qualquer outro fornecedor — teria se contratasse uma equipe tradicional para desenvolver o SISTEX do zero. A análise abaixo utiliza remuneração média praticada no mercado brasileiro para profissionais sêniores.</p>
+
+      <div class="table-container">
+        <table>
+          <caption>Composição do custo de desenvolvimento</caption>
+          <thead>
+            <tr>
+              <th scope="col">Profissional</th>
+              <th scope="col" class="num">Remuneração mensal</th>
+              <th scope="col" class="num">Meses</th>
+              <th scope="col" class="num">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Tech Lead / Arquiteto sênior</td><td class="num">R$ 25.000</td><td class="num">3</td><td class="num">R$ 75.000</td></tr>
+            <tr><td>Desenvolvedor Full-stack sênior</td><td class="num">R$ 20.000</td><td class="num">5</td><td class="num">R$ 100.000</td></tr>
+            <tr><td>Desenvolvedor Backend / Integrações</td><td class="num">R$ 18.000</td><td class="num">3</td><td class="num">R$ 54.000</td></tr>
+            <tr><td>Designer UX/UI sênior</td><td class="num">R$ 15.000</td><td class="num">2</td><td class="num">R$ 30.000</td></tr>
+            <tr><td>QA + DevOps</td><td class="num">R$ 12.000</td><td class="num">2</td><td class="num">R$ 24.000</td></tr>
+            <tr><td>Gerência de projeto</td><td class="num">R$ 15.000</td><td class="num">4</td><td class="num">R$ 60.000</td></tr>
+            <tr><td>Infraestrutura e ferramentas</td><td class="num">—</td><td class="num">—</td><td class="num">R$ 15.000</td></tr>
+            <tr class="total"><td>Custo real total</td><td class="num">—</td><td class="num">6-9 meses</td><td class="num">R$ 358.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout--success">
+        <h4>Insight estratégico</h4>
+        <p>A YNTHEGRA entregou o mesmo produto em aproximadamente 15 dias ao utilizar ferramentas de IA avançadas (Claude Opus, Cursor). O custo interno foi fração do valor de mercado, mas <strong>o valor entregue ao cliente final é idêntico ao de uma construção tradicional</strong>. Esta é a base para a argumentação de precificação.</p>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 3 — VALOR FERSTEX ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-valor">
+      <h1 id="sec-valor" class="section-title"><span class="num">Seção 3</span>Valor econômico entregue à Ferstex</h1>
+
+      <p>A análise a seguir considera um cenário realista de <strong>50 drops ativos</strong> operando pela Ferstex em 6 a 12 meses. O SISTEX elimina custos operacionais diretos e indiretos significativos.</p>
+
+      <div class="table-container">
+        <table>
+          <caption>Economia mensal gerada pelo SISTEX</caption>
+          <thead>
+            <tr>
+              <th scope="col">Custo operacional eliminado</th>
+              <th scope="col" class="num">Economia mensal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Vendedor Ferstex fazendo relação manual de pedidos (3h/dia)</td><td class="num pos">R$ 6.000</td></tr>
+            <tr><td>Erros de SKU — 5% de 1.000 pedidos × R$ 80 em retrabalho</td><td class="num pos">R$ 4.000</td></tr>
+            <tr><td>Atrasos na produção por desorganização (vendas perdidas)</td><td class="num pos">R$ 3.000</td></tr>
+            <tr><td>Tempo em suporte a drops confusos</td><td class="num pos">R$ 2.000</td></tr>
+            <tr><td>Insumos, impressão e processos manuais</td><td class="num pos">R$ 500</td></tr>
+            <tr class="total"><td>Economia mensal total</td><td class="num pos">R$ 15.500</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="stats-grid" role="group" aria-label="Valor acumulado entregue">
+        <div class="stat">
+          <div class="stat-label">Em 12 meses</div>
+          <div class="stat-value">R$ 186<span class="stat-unit">mil</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Em 36 meses</div>
+          <div class="stat-value">R$ 558<span class="stat-unit">mil</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">Em 60 meses</div>
+          <div class="stat-value">R$ 930<span class="stat-unit">mil</span></div>
+        </div>
+        <div class="stat">
+          <div class="stat-label">ROI da Opção B</div>
+          <div class="stat-value">5,8<span class="stat-unit">meses</span></div>
+        </div>
+      </div>
+
+      <blockquote>
+        <p>O SISTEX deixa de ser custo para virar infraestrutura operacional. Cada real pago retorna como economia mensurável em produtividade, redução de erros e escalabilidade do modelo dropshipping.</p>
+        <cite>— Síntese do raciocínio estratégico YNTHEGRA</cite>
+      </blockquote>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 4 — OPÇÕES FERSTEX ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-opcoes">
+      <h1 id="sec-opcoes" class="section-title"><span class="num">Seção 4</span>Precificação à Ferstex · Três Opções</h1>
+
+      <div class="section-intro">
+        <p>A opção intermediária (B) é a recomendada pela ancoragem psicológica clássica e pela geração de receita recorrente sustentável.</p>
+      </div>
+
+      <div class="options" role="group" aria-label="Três opções de licenciamento para Ferstex">
+        <article class="option">
+          <p class="opt-tier">Opção A</p>
+          <h3 class="opt-name">Básica</h3>
+          <p class="opt-price"><span class="currency">R$</span>40.000</p>
+          <p class="opt-detail">À vista, sem recorrência</p>
+          <ul class="features" aria-label="Inclusos na opção Básica">
+            <li>Licença vitalícia</li>
+            <li>6 meses de suporte</li>
+            <li class="off">Atualizações após 6 meses</li>
+            <li class="off">Customizações inclusas</li>
+          </ul>
+        </article>
+
+        <article class="option featured">
+          <span class="opt-badge">Recomendada</span>
+          <p class="opt-tier">Opção B</p>
+          <h3 class="opt-name">Completa</h3>
+          <p class="opt-price"><span class="currency">R$</span>60.000</p>
+          <p class="opt-detail">+ R$ 2.500/mês de manutenção</p>
+          <ul class="features" aria-label="Inclusos na opção Completa">
+            <li>Licença vitalícia</li>
+            <li>Setup e treinamento</li>
+            <li>Suporte contínuo</li>
+            <li>Atualizações de segurança</li>
+            <li>20h/mês de customização</li>
+          </ul>
+        </article>
+
+        <article class="option">
+          <p class="opt-tier">Opção C</p>
+          <h3 class="opt-name">Premium</h3>
+          <p class="opt-price"><span class="currency">R$</span>100.000</p>
+          <p class="opt-detail">+ R$ 3.500/mês de manutenção</p>
+          <ul class="features" aria-label="Inclusos na opção Premium">
+            <li>Licença vitalícia</li>
+            <li>12 meses de suporte pleno</li>
+            <li>Features customizadas</li>
+            <li>Account manager dedicado</li>
+            <li>Horas ilimitadas/mês</li>
+          </ul>
+        </article>
+      </div>
+
+      <h2>Detalhamento da Opção B · Recomendada</h2>
+
+      <div class="table-container">
+        <table>
+          <caption>Composição financeira da opção recomendada</caption>
+          <thead>
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col" class="num">Valor</th>
+              <th scope="col">Observações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Licença vitalícia de uso</td><td class="num"><strong>R$ 60.000</strong></td><td>Parcelável em 6× ou 12×</td></tr>
+            <tr><td>Setup + treinamento</td><td class="num">R$ 5.000</td><td>Incluído no pacote</td></tr>
+            <tr><td>Manutenção mensal</td><td class="num"><strong>R$ 2.500</strong></td><td>Obrigatória · atualizações, suporte, customizações leves</td></tr>
+            <tr class="total"><td>Custo total no primeiro ano</td><td class="num">R$ 90.000</td><td>Licença + 12 meses de manutenção</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout--success">
+        <h4>Retorno sobre o investimento (ROI)</h4>
+        <p>Considerando a economia mensal de R$ 15.500, o payback ocorre em <strong>5,8 meses</strong>. Ao final de 3 anos, a Ferstex terá economizado líquidos <strong>R$ 360.000</strong> — descontado o investimento total de R$ 198.000 no período.</p>
+      </div>
+
+      <h3>Cláusulas contratuais essenciais</h3>
+      <ul>
+        <li><strong>Propriedade intelectual:</strong> a YNTHEGRA mantém titularidade do código-fonte e da marca SISTEX. A Ferstex recebe licença de uso perpétua, não exclusiva.</li>
+        <li><strong>Exclusividade de revenda:</strong> a Ferstex não pode sublicenciar, revender ou distribuir o software. A YNTHEGRA pode comercializar o SISTEX para outros fornecedores do setor.</li>
+        <li><strong>Cancelamento da manutenção:</strong> a Ferstex mantém o direito de uso da versão atual, porém sem acesso a atualizações de segurança e novas funcionalidades.</li>
+        <li><strong>Propriedade dos dados:</strong> dados operacionais (pedidos, drops, catálogo) são da Ferstex. Dados agregados e anônimos podem ser utilizados pela YNTHEGRA para aprimorar o produto.</li>
+        <li><strong>SLA:</strong> disponibilidade de 99% mensal. Suporte em até 24h úteis para incidentes e 72h úteis para dúvidas operacionais.</li>
+      </ul>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 5 — MERCADO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-mercado">
+      <h1 id="sec-mercado" class="section-title"><span class="num">Seção 5</span>Benchmarking de mercado</h1>
+
+      <p>Comparativo com plataformas SaaS e marketplaces de referência, organizadas do modelo <em>SaaS puro</em> ao <em>marketplace agressivo</em>.</p>
+
+      <div class="table-container">
+        <table>
+          <caption>Modelos de cobrança em plataformas comparáveis</caption>
+          <thead>
+            <tr>
+              <th scope="col">Plataforma</th>
+              <th scope="col">Modelo</th>
+              <th scope="col" class="num">Take-rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Shopify (plano básico)</td><td>Mensalidade fixa (US$ 39)</td><td class="num pos">0%</td></tr>
+            <tr><td>Nuvemshop Enterprise</td><td>Mensalidade (R$ 5.000 a 10.000)</td><td class="num pos">0%</td></tr>
+            <tr><td>Shopify Plus</td><td>Mensalidade + take-rate</td><td class="num">0,15%</td></tr>
+            <tr><td>Kiwify (infoproduto)</td><td>Take-rate + taxa fixa</td><td class="num">4,99% + R$ 1</td></tr>
+            <tr><td>Eduzz</td><td>Take-rate + taxa fixa</td><td class="num">9% + R$ 3</td></tr>
+            <tr><td>Hotmart</td><td>Take-rate + taxa fixa</td><td class="num">10% + R$ 1</td></tr>
+            <tr><td>Amazon</td><td>Take-rate puro</td><td class="num neg">8 a 15%</td></tr>
+            <tr><td>Mercado Livre (Clássico)</td><td>Take-rate puro</td><td class="num neg">11 a 17%</td></tr>
+            <tr><td>Shopee</td><td>Take-rate puro</td><td class="num neg">12 a 18%</td></tr>
+            <tr><td>ERP customizado (SAP, TOTVS)</td><td>Compra única + consultoria</td><td class="num">R$ 80 a 300 mil</td></tr>
+            <tr><td>White-label SaaS customizado</td><td>One-time</td><td class="num">R$ 150 a 500 mil</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout--warning">
+        <h4>Insight estratégico</h4>
+        <p>Take-rates elevados (11 a 18%) são praticados por <strong>marketplaces que geram tráfego e vendas</strong>. O SISTEX não é marketplace — é infraestrutura de automação pós-venda. A referência correta para benchmarking é Shopify Plus (0,15%) e ERPs enterprise, não Mercado Livre ou Shopee.</p>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 6 — MODELOS ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-modelos">
+      <h1 id="sec-modelos" class="section-title"><span class="num">Seção 6</span>Modelos de cobrança · Análise comparativa</h1>
+
+      <div class="two-col">
+        <div>
+          <h4>Mensalidade fixa pura</h4>
+          <p><strong class="pos">Vantagens:</strong> receita previsível, fácil de vender, fornecedor grande adora (percentual efetivo baixo), simples de comunicar.</p>
+          <p><strong class="neg">Desvantagens:</strong> fornecedor pequeno desiste, YNTHEGRA deixa dinheiro na mesa com grandes, sem alinhamento de sucesso.</p>
+        </div>
+        <div>
+          <h4>Take-rate puro</h4>
+          <p><strong class="pos">Vantagens:</strong> escala com o sucesso do cliente, alinhamento total de incentivo, barreira de entrada baixa.</p>
+          <p><strong class="neg">Desvantagens:</strong> receita instável (mês ruim = caixa ruim), pune fornecedor grande, difícil para fornecedor prever custo.</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <h4>Modelo híbrido com CAP · Recomendado</h4>
+        <p><strong>Vantagens:</strong> barreira de entrada baixa, escala com o cliente, previsibilidade garantida pelo teto, alinhamento de incentivo e aceitação de mercado (modelo adotado pela Shopify Plus).</p>
+        <p><strong>Único ponto de atenção:</strong> comunicação mais complexa — demanda página de preços com exemplos ou simulador interativo para ilustrar a conta.</p>
+      </div>
+
+      <h2>Simulação por tamanho de fornecedor</h2>
+      <p>Considerando ticket médio de R$ 150 por pedido no segmento de moda fitness:</p>
+
+      <h3>Fornecedor pequeno · 10 drops · 200 pedidos/mês</h3>
+      <p>Volume transacionado mensal: <strong>R$ 30.000</strong></p>
+      <div class="data-row">
+        <div class="label">Mensalidade R$ 497</div>
+        <div class="bar"><div class="bar-fill" style="width: 55%"></div></div>
+        <div class="value">1,65%</div>
+      </div>
+      <div class="data-row">
+        <div class="label">Take-rate 2%</div>
+        <div class="bar"><div class="bar-fill" style="width: 67%; background: var(--danger)"></div></div>
+        <div class="value">R$ 600</div>
+      </div>
+      <div class="data-row">
+        <div class="label">Híbrido R$297 + 1%</div>
+        <div class="bar"><div class="bar-fill gold" style="width: 66%"></div></div>
+        <div class="value">R$ 597</div>
+      </div>
+
+      <h3>Fornecedor médio · 30 drops · 600 pedidos/mês</h3>
+      <p>Volume transacionado mensal: <strong>R$ 90.000</strong></p>
+      <div class="data-row">
+        <div class="label">Mensalidade R$ 497</div>
+        <div class="bar"><div class="bar-fill success" style="width: 18%"></div></div>
+        <div class="value">0,55%</div>
+      </div>
+      <div class="data-row">
+        <div class="label">Take-rate 2%</div>
+        <div class="bar"><div class="bar-fill" style="width: 100%; background: var(--danger)"></div></div>
+        <div class="value">R$ 1.800</div>
+      </div>
+      <div class="data-row">
+        <div class="label">Híbrido R$297 + 1%</div>
+        <div class="bar"><div class="bar-fill gold" style="width: 50%"></div></div>
+        <div class="value">R$ 1.197</div>
+      </div>
+
+      <h3>Fornecedor grande · 100 drops · 2.000 pedidos/mês</h3>
+      <p>Volume transacionado mensal: <strong>R$ 300.000</strong></p>
+      <div class="data-row">
+        <div class="label">Mensalidade R$ 497</div>
+        <div class="bar"><div class="bar-fill success" style="width: 8%"></div></div>
+        <div class="value">0,16%</div>
+      </div>
+      <div class="data-row">
+        <div class="label">Take-rate 2%</div>
+        <div class="bar"><div class="bar-fill" style="width: 100%; background: var(--danger)"></div></div>
+        <div class="value">R$ 6.000</div>
+      </div>
+      <div class="data-row">
+        <div class="label">Híbrido com CAP</div>
+        <div class="bar"><div class="bar-fill gold" style="width: 42%"></div></div>
+        <div class="value">R$ 2.500</div>
+      </div>
+
+      <div class="callout callout--success">
+        <h4>Conclusão</h4>
+        <p>O modelo híbrido com CAP é o único que atende satisfatoriamente aos três perfis de fornecedor. A mensalidade fixa pune os pequenos; o take-rate puro pune os grandes. <strong>Somente o híbrido com teto equilibra entrada acessível, escala com o cliente e previsibilidade para ambos os lados.</strong></p>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 7 — MODELO RECOMENDADO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-recomendado">
+      <h1 id="sec-recomendado" class="section-title"><span class="num">Seção 7</span>Modelo recomendado · Híbrido com CAP</h1>
+
+      <div class="callout">
+        <h4>Estrutura de cobrança para novos fornecedores</h4>
+        <p><strong>Base:</strong> R$ 297/mês · inclui até 50 pedidos processados</p>
+        <p><strong>Excedente:</strong> R$ 4,90 por pedido adicional</p>
+        <p><strong>Teto (CAP):</strong> R$ 2.500/mês, independente do volume</p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <caption>Simulação de cobrança por volume</caption>
+          <thead>
+            <tr>
+              <th scope="col">Pedidos/mês</th>
+              <th scope="col" class="num">Valor cobrado</th>
+              <th scope="col">Detalhe</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Até 50</td><td class="num">R$ 297</td><td>Base inclusa</td></tr>
+            <tr><td>100</td><td class="num">R$ 542</td><td>R$ 297 + R$ 245 (50 excedentes)</td></tr>
+            <tr><td>250</td><td class="num">R$ 1.277</td><td>R$ 297 + R$ 980 (200 excedentes)</td></tr>
+            <tr><td>500</td><td class="num"><strong>R$ 2.500</strong></td><td>Bateu o CAP</td></tr>
+            <tr><td>1.000</td><td class="num">R$ 2.500</td><td>CAP mantido</td></tr>
+            <tr><td>2.000</td><td class="num">R$ 2.500</td><td>CAP mantido · previsibilidade</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Evolução para três tiers (a partir do ano 2)</h2>
+
+      <div class="options">
+        <article class="option">
+          <p class="opt-tier">Tier 1</p>
+          <h3 class="opt-name">Starter</h3>
+          <p class="opt-price"><span class="currency">R$</span>297</p>
+          <p class="opt-detail">/mês + R$ 4,90/pedido</p>
+          <ul class="features">
+            <li>Até 50 pedidos inclusos</li>
+            <li>CAP de R$ 2.500/mês</li>
+            <li>Suporte padrão</li>
+          </ul>
+        </article>
+        <article class="option featured">
+          <span class="opt-badge">Popular</span>
+          <p class="opt-tier">Tier 2</p>
+          <h3 class="opt-name">Growth</h3>
+          <p class="opt-price"><span class="currency">R$</span>497</p>
+          <p class="opt-detail">/mês + R$ 3,90/pedido</p>
+          <ul class="features">
+            <li>Até 100 pedidos inclusos</li>
+            <li>CAP de R$ 4.000/mês</li>
+            <li>Suporte prioritário</li>
+            <li>Relatórios avançados</li>
+          </ul>
+        </article>
+        <article class="option">
+          <p class="opt-tier">Tier 3</p>
+          <h3 class="opt-name">Enterprise</h3>
+          <p class="opt-price"><span class="currency">R$</span>997</p>
+          <p class="opt-detail">/mês + R$ 2,90/pedido</p>
+          <ul class="features">
+            <li>Pedidos ilimitados</li>
+            <li>CAP negociável</li>
+            <li>Account manager</li>
+            <li>SLA dedicado</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 8 — OFERTA DE LANÇAMENTO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-oferta">
+      <h1 id="sec-oferta" class="section-title"><span class="num">Seção 8</span>Oferta de lançamento · Primeiros 20 fornecedores</h1>
+
+      <p>Para acelerar a aquisição inicial e validar <em>product-market fit</em>, propõe-se uma oferta estratégica. Remove a barreira de entrada nos primeiros 3 meses, garantindo experimentação sem risco e gerando <em>switching cost</em> operacional antes da cobrança plena.</p>
+
+      <div class="timeline" aria-label="Etapas da oferta de lançamento">
+        <div class="timeline-item">
+          <p class="timeline-label">Meses 1 a 3</p>
+          <p class="timeline-title">Período de adesão sem risco</p>
+          <p class="timeline-desc">Zero mensalidade fixa. Apenas R$ 6,90 por pedido processado. Fornecedor experimenta o SISTEX sem compromisso financeiro recorrente.</p>
+        </div>
+        <div class="timeline-item">
+          <p class="timeline-label">Meses 4 a 12</p>
+          <p class="timeline-title">Transição suave para o modelo pago</p>
+          <p class="timeline-desc">Mensalidade de R$ 197 + R$ 4,90 por pedido. Fornecedor já experimentou valor e está operacionalmente dependente da plataforma.</p>
+        </div>
+        <div class="timeline-item">
+          <p class="timeline-label">A partir do ano 2</p>
+          <p class="timeline-title">Preço cheio do plano Starter</p>
+          <p class="timeline-desc">Mensalidade de R$ 297 + R$ 4,90 por pedido. Fornecedor convertido em cliente regular, com receita recorrente plena.</p>
+        </div>
+      </div>
+
+      <h3>Racional estratégico</h3>
+      <ul>
+        <li><strong>Remove barreira de entrada:</strong> fornecedor testa o SISTEX sem risco financeiro nos primeiros 3 meses.</li>
+        <li><strong>Gera switching cost:</strong> após 3 meses operando pela plataforma, a dependência operacional torna a migração improvável.</li>
+        <li><strong>Acelera validação de mercado:</strong> permite fechar os primeiros 20 clientes entre 3 e 6 meses.</li>
+        <li><strong>Gera cases de sucesso:</strong> primeiros clientes viram referência para os próximos, reduzindo custo de aquisição (CAC).</li>
+      </ul>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 9 — PROJEÇÃO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-projecao">
+      <h1 id="sec-projecao" class="section-title"><span class="num">Seção 9</span>Projeção de faturamento · 36 meses</h1>
+
+      <div class="section-intro">
+        <p>Cenário conservador, considerando mix de fornecedores (60% pequenos · 30% médios · 10% grandes) e taxa de conversão de 50% da oferta de lançamento.</p>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <caption>Projeção de aquisição e receita</caption>
+          <thead>
+            <tr>
+              <th scope="col">Período</th>
+              <th scope="col" class="num">Fornecedores ativos</th>
+              <th scope="col" class="num">Receita mensal</th>
+              <th scope="col" class="num">Receita anualizada</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mês 3</td><td class="num">5</td><td class="num">R$ 2.500</td><td class="num">R$ 30.000</td></tr>
+            <tr><td>Mês 6</td><td class="num">12</td><td class="num">R$ 8.000</td><td class="num">R$ 96.000</td></tr>
+            <tr><td>Ano 1</td><td class="num">25</td><td class="num">R$ 22.000</td><td class="num">R$ 264.000</td></tr>
+            <tr><td>Ano 2</td><td class="num">60</td><td class="num">R$ 65.000</td><td class="num">R$ 780.000</td></tr>
+            <tr class="total"><td>Ano 3</td><td class="num">120</td><td class="num">R$ 150.000</td><td class="num">R$ 1.800.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Faturamento consolidado YNTHEGRA</h2>
+      <p>Considerando três fontes de receita simultâneas: licença Ferstex, assinaturas de fornecedores e split de revendedores (70%).</p>
+
+      <div class="table-container">
+        <table>
+          <caption>Visão consolidada de receita por ano</caption>
+          <thead>
+            <tr>
+              <th scope="col">Fonte de receita</th>
+              <th scope="col" class="num">Ano 1</th>
+              <th scope="col" class="num">Ano 2</th>
+              <th scope="col" class="num">Ano 3</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Licença Ferstex (vitalícia)</td><td class="num">R$ 60.000</td><td class="num">—</td><td class="num">—</td></tr>
+            <tr><td>Manutenção Ferstex</td><td class="num">R$ 30.000</td><td class="num">R$ 30.000</td><td class="num">R$ 30.000</td></tr>
+            <tr><td>Assinaturas de fornecedores</td><td class="num">R$ 264.000</td><td class="num">R$ 780.000</td><td class="num">R$ 1.800.000</td></tr>
+            <tr><td>Split de revendedores (70%)</td><td class="num">R$ 178.800</td><td class="num">R$ 546.000</td><td class="num">R$ 1.092.000</td></tr>
+            <tr class="total"><td>Total anual</td><td class="num"><strong>R$ 532.800</strong></td><td class="num"><strong>R$ 1.356.000</strong></td><td class="num"><strong>R$ 2.922.000</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout--success">
+        <h4>Projeção consolidada</h4>
+        <p>Em 36 meses, faturamento anual estimado entre <strong>R$ 2,5 e R$ 3,0 milhões</strong>, operando com estrutura enxuta (2 sócios + ferramentas SaaS). A margem operacional projetada é superior a 70%, dada a natureza de software e a automação via IA.</p>
+      </div>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 10 — RISCOS ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-riscos">
+      <h1 id="sec-riscos" class="section-title"><span class="num">Seção 10</span>Análise de riscos por modelo</h1>
+
+      <h3>Riscos do modelo de mensalidade fixa pura</h3>
+      <ul>
+        <li><strong>Perda de clientes pequenos:</strong> mensalidade de R$ 497 pode ser proibitiva para fornecedores iniciantes, limitando a expansão da base.</li>
+        <li><strong>Receita subótima com grandes:</strong> fornecedor de alto volume paga o mesmo que um pequeno, reduzindo margem de lucro relativa.</li>
+        <li><strong>Churn por crescimento:</strong> fornecedor que cresceu muito pode negociar desconto ou migrar para solução própria.</li>
+      </ul>
+
+      <h3>Riscos do modelo de take-rate puro</h3>
+      <ul>
+        <li><strong>Instabilidade de receita:</strong> mês com poucos pedidos gera receita baixa, inviabilizando planejamento financeiro.</li>
+        <li><strong>Fuga de clientes grandes:</strong> 2% sobre GMV elevado torna-se caro; clientes saem ou negociam.</li>
+        <li><strong>Complexidade operacional:</strong> requer medição precisa de GMV, reconciliação constante e tratamento de disputas.</li>
+        <li><strong>Percepção negativa:</strong> fornecedor sente que paga proporcionalmente ao próprio sucesso, criando atrito emocional.</li>
+      </ul>
+
+      <h3>Riscos do modelo híbrido com CAP · Mitigados</h3>
+      <ul>
+        <li><strong>Complexidade de comunicação:</strong> requer página de pricing com calculadora ou exemplos visuais claros. <em>Mitigação:</em> landing page com simulador interativo.</li>
+        <li><strong>Critério de "pedido processado":</strong> necessário definir claramente o que conta como pedido válido (novo, cancelado, estornado). <em>Mitigação:</em> contar apenas pedidos finalizados com pagamento aprovado.</li>
+        <li><strong>Percepção do CAP:</strong> pequenos podem achar injusto pagar percentual equivalente ao dos grandes. <em>Mitigação:</em> comunicar claramente que o CAP garante previsibilidade e que o modelo é escalonado por tiers.</li>
+      </ul>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 11 — DECISÕES ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-decisoes">
+      <h1 id="sec-decisoes" class="section-title"><span class="num">Seção 11</span>Decisões pendentes</h1>
+
+      <div class="callout callout--warning">
+        <h4>Pontos a decidir antes da apresentação formal</h4>
+        <p>Esta seção lista as decisões necessárias entre os sócios antes de formalizar proposta à Ferstex e configurar o sistema de billing da YNTHEGRA.</p>
+      </div>
+
+      <h3>Sobre a Ferstex · Licença vitalícia</h3>
+      <ul>
+        <li>Qual das três opções (A · B · C) apresentar como recomendada?</li>
+        <li>Prazo de pagamento: à vista, 6 parcelas ou 12 parcelas?</li>
+        <li>Desconto à vista: 10% ou 15%?</li>
+        <li>Cláusula de exclusividade geográfica (Ferstex exclusiva em SC, por exemplo)?</li>
+      </ul>
+
+      <h3>Sobre novos fornecedores · Recorrência</h3>
+      <ul>
+        <li>Adotar modelo híbrido com CAP ou mensalidade fixa R$ 497?</li>
+        <li>Manter oferta de lançamento para os primeiros 20 fornecedores?</li>
+        <li>Valor do CAP: R$ 2.500 ou R$ 3.000?</li>
+        <li>Split dos drops (70/30) mantido para fornecedores pagantes?</li>
+      </ul>
+
+      <h3>Sobre operação e aspectos legais</h3>
+      <ul>
+        <li>Contratar advogado SaaS especializado para estruturação dos contratos?</li>
+        <li>Definir responsável pela relação com fornecedor (account manager)?</li>
+        <li>Criar landing page de vendas com calculadora interativa de preços?</li>
+        <li>Estruturar processo formal de onboarding para novos fornecedores?</li>
+      </ul>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 12 — PRÓXIMOS PASSOS ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-passos">
+      <h1 id="sec-passos" class="section-title"><span class="num">Seção 12</span>Próximos passos</h1>
+
+      <ol>
+        <li><strong>Reunião entre sócios</strong> para validar este documento e tomar as decisões listadas na Seção 11.</li>
+        <li><strong>Contratar advogado especializado em SaaS</strong> para estruturar minuta de contrato para a Ferstex e modelo padrão para os demais fornecedores.</li>
+        <li><strong>Preparar proposta comercial formal</strong> com as três opções, destacando a Opção B como recomendada.</li>
+        <li><strong>Agendar apresentação com a diretoria da Ferstex,</strong> posicionando o SISTEX como investimento estratégico com ROI de 5-6 meses.</li>
+        <li><strong>Implementar o sistema de billing no SISTEX</strong> (Bloco 12+), suportando: mensalidade fixa, take-rate por pedido, CAP mensal e tiers de planos.</li>
+        <li><strong>Criar landing page pública</strong> (portalsistex.com/precos) com calculadora interativa para demonstração.</li>
+        <li><strong>Ativar oferta de lançamento</strong> para os primeiros 20 fornecedores, em campanha de 60 a 90 dias.</li>
+      </ol>
+    </section>
+
+    <!-- ━━━━━━━━━━━━━━━━━━━ SEÇÃO 13 — CONCLUSÃO ━━━━━━━━━━━━━━━━━━━ -->
+    <section aria-labelledby="sec-conclusao">
+      <h1 id="sec-conclusao" class="section-title"><span class="num">Seção 13</span>Conclusão e visão estratégica</h1>
+
+      <p class="lead">O SISTEX é um ativo tecnológico com valor de mercado estimado entre R$ 358 mil e R$ 500 mil. A YNTHEGRA o construiu com fração desse custo ao utilizar estrategicamente ferramentas de IA. O valor entregue ao cliente, entretanto, é idêntico ao de uma construção tradicional.</p>
+
+      <p>A precificação deve refletir esse valor considerando três dimensões:</p>
+      <ul>
+        <li>O <strong>custo de oportunidade</strong> da Ferstex não ter o sistema — R$ 15.500/mês em economia operacional.</li>
+        <li>O <strong>posicionamento de mercado</strong> — o SISTEX é infraestrutura premium, não commodity.</li>
+        <li>A <strong>escalabilidade</strong> do modelo — replicável para múltiplos fornecedores do setor.</li>
+      </ul>
+
+      <blockquote>
+        <p>Ferstex recebe licença vitalícia de R$ 60 mil + manutenção de R$ 2,5 mil/mês. Demais fornecedores entram no modelo híbrido de R$ 297/mês + R$ 4,90/pedido, com CAP de R$ 2.500/mês. Os primeiros 20 têm oferta de lançamento: 3 meses grátis seguidos de 9 meses a R$ 197/mês.</p>
+        <cite>— Síntese das recomendações</cite>
+      </blockquote>
+
+      <p>Esta estratégia equilibra três objetivos simultâneos:</p>
+      <ul>
+        <li>Geração de <strong>capital imediato</strong> via licença Ferstex.</li>
+        <li>Construção de <strong>receita recorrente previsível</strong> via mensalidades e take-rate com teto.</li>
+        <li><strong>Escalabilidade do negócio</strong> através de um modelo replicável para N fornecedores, sem aumentar proporcionalmente a estrutura operacional.</li>
+      </ul>
+
+      <div class="callout callout--success">
+        <h4>Recomendação final</h4>
+        <p>Aprovar este documento como base estratégica, definir as decisões pendentes em reunião de sócios nos próximos 7 dias, contratar advogado especializado em até 14 dias e iniciar ciclo formal de vendas com a Ferstex em 2 a 3 semanas.</p>
+      </div>
+
+      <div class="signatures">
+        <div class="sig">
+          <div class="sig-name">Erick</div>
+          <div class="sig-role">Sócio · YNTHEGRA</div>
+        </div>
+        <div class="sig">
+          <div class="sig-name">Sócio Fundador</div>
+          <div class="sig-role">CEO · YNTHEGRA</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p><strong>YNTHEGRA</strong> · Infraestrutura tecnológica para fornecedores brasileiros</p>
+    <p>Documento confidencial · Uso interno · Versão 2.0 · 22 de abril de 2026</p>
+  </footer>
+
+</article>
+
+</body>
+</html>

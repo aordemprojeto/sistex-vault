@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estratégia de Precificação — SISTEX | YNTHEGRA</title>
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 18mm 25mm 18mm;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    color: #1e293b;
+    line-height: 1.6;
+    background: #f8fafc;
+    padding: 40px 20px;
+    font-size: 11pt;
+  }
+  .document {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 60px 50px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    border-radius: 8px;
+  }
+  @media print {
+    body { background: white; padding: 0; }
+    .document { box-shadow: none; border-radius: 0; padding: 0; max-width: 100%; }
+    .no-print { display: none; }
+    .page-break { page-break-before: always; }
+    h1, h2, h3 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+    .highlight-box { page-break-inside: avoid; }
+  }
+  .cover {
+    text-align: center;
+    padding: 80px 20px 60px;
+    border-bottom: 4px solid #1e40af;
+    margin-bottom: 50px;
+  }
+  .cover .logo {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #1e40af;
+    letter-spacing: 4px;
+    margin-bottom: 40px;
+  }
+  .cover h1 {
+    font-size: 32pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .cover .subtitle {
+    font-size: 14pt;
+    color: #64748b;
+    margin-bottom: 50px;
+    font-weight: 400;
+  }
+  .cover .meta {
+    background: #f1f5f9;
+    padding: 24px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: left;
+    margin-top: 30px;
+  }
+  .cover .meta-item { margin: 6px 0; font-size: 11pt; }
+  .cover .meta-item strong { color: #1e40af; display: inline-block; min-width: 110px; }
+
+  h1 {
+    color: #0f172a;
+    font-size: 22pt;
+    margin: 40px 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 3px solid #1e40af;
+    font-weight: 700;
+  }
+  h2 {
+    color: #1e40af;
+    font-size: 16pt;
+    margin: 32px 0 14px;
+    font-weight: 700;
+  }
+  h3 {
+    color: #0f172a;
+    font-size: 13pt;
+    margin: 20px 0 10px;
+    font-weight: 600;
+  }
+  p { margin: 10px 0; text-align: justify; }
+  strong { color: #0f172a; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 10.5pt;
+    background: white;
+    border: 1px solid #e2e8f0;
+  }
+  table th {
+    background: #1e40af;
+    color: white;
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 10pt;
+  }
+  table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  table tr:nth-child(even) td { background: #f8fafc; }
+  table tr:hover td { background: #eff6ff; }
+  table .emphasis { font-weight: 700; color: #1e40af; }
+  table .positive { color: #059669; font-weight: 600; }
+  table .negative { color: #dc2626; font-weight: 600; }
+
+  .highlight-box {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-left: 4px solid #1e40af;
+    padding: 20px 24px;
+    margin: 20px 0;
+    border-radius: 4px;
+  }
+  .highlight-box.success {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-left-color: #059669;
+  }
+  .highlight-box.warning {
+    background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+    border-left-color: #ca8a04;
+  }
+  .highlight-box.danger {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-left-color: #dc2626;
+  }
+
+  .three-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin: 24px 0;
+  }
+  .option-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 24px 20px;
+    background: white;
+    text-align: center;
+    position: relative;
+  }
+  .option-card.recommended {
+    border-color: #1e40af;
+    box-shadow: 0 8px 24px rgba(30, 64, 175, 0.15);
+    transform: scale(1.02);
+  }
+  .option-card .tier {
+    font-size: 10pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+  .option-card .name {
+    font-size: 16pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 16px;
+  }
+  .option-card .price {
+    font-size: 22pt;
+    font-weight: 800;
+    color: #1e40af;
+    margin-bottom: 6px;
+  }
+  .option-card .price-detail {
+    font-size: 10pt;
+    color: #64748b;
+    margin-bottom: 16px;
+  }
+  .option-card .features {
+    text-align: left;
+    font-size: 10pt;
+    color: #334155;
+  }
+  .option-card .features li {
+    margin: 6px 0;
+    padding-left: 4px;
+  }
+  .option-card.recommended .badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e40af;
+    color: white;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 9pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  ul { margin: 10px 0 10px 22px; }
+  li { margin: 4px 0; }
+
+  .emoji { font-style: normal; }
+
+  .footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 2px solid #e2e8f0;
+    text-align: center;
+    color: #64748b;
+    font-size: 9pt;
+  }
+
+  .instructions-box {
+    background: #fef3c7;
+    border: 2px dashed #ca8a04;
+    padding: 20px 24px;
+    margin: 30px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 10.5pt;
+  }
+
+  @media print {
+    .instructions-box { display: none; }
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .kpi-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .kpi-card .label {
+    font-size: 9pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .kpi-card .value {
+    font-size: 18pt;
+    font-weight: 700;
+    color: #1e40af;
+    margin-top: 6px;
+  }
+
+  blockquote {
+    border-left: 4px solid #1e40af;
+    padding: 12px 20px;
+    margin: 16px 0;
+    background: #f8fafc;
+    font-style: italic;
+    color: #334155;
+  }
+
+  .signature {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid #e2e8f0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .signature-block {
+    text-align: center;
+  }
+  .signature-line {
+    border-bottom: 1px solid #334155;
+    margin-bottom: 8px;
+    padding-top: 40px;
+  }
+  .signature-label {
+    font-size: 10pt;
+    color: #64748b;
+  }
+</style>
+</head>
+<body>
+
+<div class="instructions-box no-print">
+  <strong>📄 COMO SALVAR COMO PDF:</strong> Aperte <strong>Ctrl + P</strong> e escolha "Salvar como PDF" no destino.
+  Ajuste o layout para "A4 / Retrato" e margens "Padrão".
+</div>
+
+<div class="document">
+
+  <!-- CAPA -->
+  <div class="cover">
+    <div class="logo">YNTHEGRA</div>
+    <h1>Estratégia de<br>Precificação — SISTEX</h1>
+    <div class="subtitle">Análise estratégica para venda à Ferstex<br>e modelo de assinatura para fornecedores</div>
+    <div class="meta">
+      <div class="meta-item"><strong>Documento:</strong> Confidencial — Uso interno</div>
+      <div class="meta-item"><strong>Data:</strong> 22 de abril de 2026</div>
+      <div class="meta-item"><strong>Destinatários:</strong> Erick & Sócio YNTHEGRA</div>
+      <div class="meta-item"><strong>Versão:</strong> 1.0 — Rascunho para discussão</div>
+      <div class="meta-item"><strong>Status:</strong> Pendente de decisão</div>
+    </div>
+  </div>
+
+  <!-- RESUMO EXECUTIVO -->
+  <h1>Resumo Executivo</h1>
+
+  <p>Este documento apresenta a análise estratégica de precificação do SISTEX — plataforma SaaS multi-tenant desenvolvida pela YNTHEGRA para automatizar operações de dropshipping de fornecedores de moda fitness. O objetivo é subsidiar a decisão sobre:</p>
+
+  <ul>
+    <li><strong>Venda vitalícia à Ferstex</strong> (parceira-piloto e primeiro tenant)</li>
+    <li><strong>Modelo de assinatura recorrente</strong> para os próximos fornecedores</li>
+    <li><strong>Comparação entre mensalidade fixa e modelo híbrido com take-rate</strong></li>
+    <li><strong>Projeção de faturamento em 3 anos</strong></li>
+  </ul>
+
+  <div class="highlight-box">
+    <strong>Síntese das recomendações:</strong>
+    <ul>
+      <li><strong>Ferstex:</strong> Licença vitalícia de R$ 60.000 + manutenção mensal de R$ 2.500 (parceiro-piloto)</li>
+      <li><strong>Outros fornecedores:</strong> Modelo híbrido R$ 297/mês + R$ 4,90 por pedido processado, com CAP de R$ 2.500/mês</li>
+      <li><strong>Oferta de lançamento:</strong> Primeiros 20 fornecedores pagam R$ 197/mês (preço promocional 12 meses)</li>
+      <li><strong>Projeção:</strong> ~R$ 2 milhões de faturamento anual em 3 anos (cenário conservador)</li>
+    </ul>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Custo real<br>de desenvolvimento</div>
+      <div class="value">R$ 358k</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Economia mensal<br>para Ferstex</div>
+      <div class="value">R$ 15,5k</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Licença vitalícia<br>recomendada</div>
+      <div class="value">R$ 60k</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Potencial em<br>3 anos</div>
+      <div class="value">R$ 1,8M</div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 1: CUSTO DE DESENVOLVIMENTO -->
+  <div class="page-break"></div>
+  <h1>1. Custo Real de Desenvolvimento do SISTEX</h1>
+
+  <p>Para precificar com base em valor entregue, estabelecemos o custo real que a Ferstex teria se contratasse uma equipe tradicional para desenvolver o SISTEX do zero:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Profissional</th>
+        <th style="text-align:right">Custo Mensal</th>
+        <th style="text-align:center">Meses</th>
+        <th style="text-align:right">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Tech Lead / Arquiteto sênior</td><td style="text-align:right">R$ 25.000</td><td style="text-align:center">3</td><td style="text-align:right">R$ 75.000</td></tr>
+      <tr><td>Desenvolvedor Full-stack sênior</td><td style="text-align:right">R$ 20.000</td><td style="text-align:center">5</td><td style="text-align:right">R$ 100.000</td></tr>
+      <tr><td>Desenvolvedor Backend / Integrações</td><td style="text-align:right">R$ 18.000</td><td style="text-align:center">3</td><td style="text-align:right">R$ 54.000</td></tr>
+      <tr><td>Designer UX/UI sênior</td><td style="text-align:right">R$ 15.000</td><td style="text-align:center">2</td><td style="text-align:right">R$ 30.000</td></tr>
+      <tr><td>QA + DevOps</td><td style="text-align:right">R$ 12.000</td><td style="text-align:center">2</td><td style="text-align:right">R$ 24.000</td></tr>
+      <tr><td>Gerência de Projeto</td><td style="text-align:right">R$ 15.000</td><td style="text-align:center">4</td><td style="text-align:right">R$ 60.000</td></tr>
+      <tr><td>Infraestrutura + Ferramentas</td><td style="text-align:right">—</td><td style="text-align:center">—</td><td style="text-align:right">R$ 15.000</td></tr>
+      <tr style="background:#eff6ff">
+        <td class="emphasis">CUSTO REAL TOTAL</td>
+        <td></td>
+        <td style="text-align:center" class="emphasis">6-9 meses</td>
+        <td style="text-align:right" class="emphasis">R$ 358.000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box success">
+    <strong>Observação estratégica:</strong> A YNTHEGRA entregou o mesmo produto em aproximadamente 15 dias utilizando ferramentas de IA (Claude Code, Cursor). O valor de mercado do produto, porém, permanece o mesmo — cerca de R$ 358.000 se fosse desenvolvido de forma tradicional. Esta é a base de argumentação para negociação.
+  </div>
+
+  <!-- SEÇÃO 2: VALOR ENTREGUE -->
+  <h1>2. Valor Econômico Entregue à Ferstex</h1>
+
+  <p>Considerando cenário realista de <strong>50 drops ativos na Ferstex</strong> em 6-12 meses de operação, o SISTEX elimina custos operacionais significativos:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Custo operacional eliminado</th>
+        <th style="text-align:right">Economia mensal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Vendedor Ferstex fazendo relação manual (3h/dia)</td><td style="text-align:right" class="positive">R$ 6.000</td></tr>
+      <tr><td>Erros de SKU (~5% de 1.000 pedidos × R$ 80 perdido)</td><td style="text-align:right" class="positive">R$ 4.000</td></tr>
+      <tr><td>Atrasos na produção por desorganização (vendas perdidas)</td><td style="text-align:right" class="positive">R$ 3.000</td></tr>
+      <tr><td>Tempo em suporte a drops confusos</td><td style="text-align:right" class="positive">R$ 2.000</td></tr>
+      <tr><td>Papel, impressão, processos manuais</td><td style="text-align:right" class="positive">R$ 500</td></tr>
+      <tr style="background:#f0fdf4">
+        <td class="emphasis">ECONOMIA MENSAL TOTAL</td>
+        <td style="text-align:right" class="emphasis positive">R$ 15.500</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="kpi-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="kpi-card">
+      <div class="label">Em 1 ano</div>
+      <div class="value">R$ 186k</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Em 3 anos</div>
+      <div class="value">R$ 558k</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Em 5 anos</div>
+      <div class="value">R$ 930k</div>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 3: OPÇÕES FERSTEX -->
+  <div class="page-break"></div>
+  <h1>3. Precificação Ferstex — 3 Opções Vitalícias</h1>
+
+  <p>Propõem-se três opções de pacote para a Ferstex. A opção intermediária é a recomendada estrategicamente (ancoragem psicológica + geração de receita recorrente sustentável).</p>
+
+  <div class="three-column">
+    <div class="option-card">
+      <div class="tier">Opção A</div>
+      <div class="name">Básica</div>
+      <div class="price">R$ 40.000</div>
+      <div class="price-detail">à vista, sem recorrência</div>
+      <ul class="features">
+        <li>✓ Licença vitalícia</li>
+        <li>✓ 6 meses de suporte</li>
+        <li>✗ Sem atualizações após</li>
+        <li>✗ Sem customizações</li>
+      </ul>
+    </div>
+
+    <div class="option-card recommended">
+      <div class="badge">Recomendada</div>
+      <div class="tier">Opção B</div>
+      <div class="name">Completa</div>
+      <div class="price">R$ 60.000</div>
+      <div class="price-detail">+ R$ 2.500/mês manutenção</div>
+      <ul class="features">
+        <li>✓ Licença vitalícia</li>
+        <li>✓ Setup + treinamento</li>
+        <li>✓ Suporte contínuo</li>
+        <li>✓ Atualizações de segurança</li>
+        <li>✓ 20h de customização/mês</li>
+      </ul>
+    </div>
+
+    <div class="option-card">
+      <div class="tier">Opção C</div>
+      <div class="name">Premium</div>
+      <div class="price">R$ 100.000</div>
+      <div class="price-detail">+ R$ 3.500/mês manutenção</div>
+      <ul class="features">
+        <li>✓ Licença vitalícia</li>
+        <li>✓ 12 meses de suporte</li>
+        <li>✓ Features customizadas</li>
+        <li>✓ Dedicated account</li>
+        <li>✓ Horas ilimitadas/mês</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Detalhamento da Opção B (Recomendada)</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th style="text-align:right">Valor</th>
+        <th>Observações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Licença vitalícia de uso</td>
+        <td style="text-align:right" class="emphasis">R$ 60.000</td>
+        <td>Parcelável em 6× R$ 10.000 ou 12× R$ 5.500</td>
+      </tr>
+      <tr>
+        <td>Setup + treinamento</td>
+        <td style="text-align:right">R$ 5.000</td>
+        <td>Incluído no pacote</td>
+      </tr>
+      <tr>
+        <td>Manutenção mensal</td>
+        <td style="text-align:right" class="emphasis">R$ 2.500</td>
+        <td>Obrigatória. Inclui atualizações, suporte e customizações leves</td>
+      </tr>
+      <tr>
+        <td>Custo total Ano 1</td>
+        <td style="text-align:right" class="emphasis">R$ 90.000</td>
+        <td>Licença + 12 meses manutenção</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box success">
+    <strong>ROI para Ferstex:</strong> Payback em <strong>5,8 meses</strong> considerando economia mensal de R$ 15.500. Em 3 anos: economia líquida projetada de <strong>R$ 360.000</strong> (R$ 558k economizados − R$ 198k pagos).
+  </div>
+
+  <h3>Cláusulas Contratuais Essenciais (Opção B)</h3>
+  <ul>
+    <li><strong>Propriedade intelectual:</strong> YNTHEGRA mantém titularidade do código-fonte e da marca SISTEX. Ferstex recebe licença de uso perpétua, não exclusiva.</li>
+    <li><strong>Exclusividade de revenda:</strong> Ferstex não pode sublicenciar, vender ou distribuir o software para terceiros. A YNTHEGRA pode comercializar o SISTEX para outros fornecedores do setor.</li>
+    <li><strong>Cancelamento da manutenção:</strong> Se a Ferstex cancelar a manutenção, mantém o direito de uso da versão atual, porém sem acesso a atualizações de segurança e novas funcionalidades.</li>
+    <li><strong>Propriedade dos dados:</strong> Dados operacionais da Ferstex (pedidos, drops, catálogo) são de propriedade da Ferstex. Dados agregados e anônimos podem ser utilizados pela YNTHEGRA para melhorar o produto.</li>
+    <li><strong>SLA:</strong> Disponibilidade de 99% mensal. Tempo de resposta de suporte: 24h úteis para incidentes, 72h úteis para dúvidas.</li>
+  </ul>
+
+  <!-- SEÇÃO 4: COMPARAÇÃO COM MERCADO -->
+  <div class="page-break"></div>
+  <h1>4. Comparação com Mercado</h1>
+
+  <p>Benchmarking de plataformas SaaS comparáveis para validar a precificação proposta:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Plataforma</th>
+        <th>Modelo de cobrança</th>
+        <th>Take-rate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Shopify (Plano Básico)</td><td>Mensalidade fixa (US$ 39)</td><td class="positive">0%</td></tr>
+      <tr><td>Shopify Plus</td><td>Mensalidade (US$ 2.000+) + take-rate</td><td>0,15%</td></tr>
+      <tr><td>Nuvemshop Enterprise</td><td>Mensalidade (R$ 5-10k)</td><td class="positive">0%</td></tr>
+      <tr><td>Mercado Livre Clássico</td><td>Take-rate puro</td><td class="negative">11-17%</td></tr>
+      <tr><td>Shopee</td><td>Take-rate puro</td><td class="negative">12-18%</td></tr>
+      <tr><td>Amazon</td><td>Take-rate puro</td><td class="negative">8-15%</td></tr>
+      <tr><td>Hotmart</td><td>Take-rate + taxa fixa</td><td>10% + R$ 1</td></tr>
+      <tr><td>Kiwify</td><td>Take-rate + taxa fixa</td><td>4,99% + R$ 1</td></tr>
+      <tr><td>Eduzz</td><td>Take-rate + taxa fixa</td><td>9% + R$ 3</td></tr>
+      <tr><td>ERP customizado (SAP/TOTVS)</td><td>Compra única + consultoria</td><td>R$ 80-300k + consultoria</td></tr>
+      <tr><td>White-label SaaS customizado</td><td>One-time</td><td>R$ 150-500k</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box warning">
+    <strong>Insight estratégico:</strong> Take-rates altos (11-18%) são praticados por <strong>marketplaces que geram tráfego e vendas</strong>. O SISTEX não é marketplace — é infraestrutura de automação pós-venda. A comparação correta é com Shopify Plus (0,15%) e ERPs, não com marketplaces.
+  </div>
+
+  <!-- SEÇÃO 5: TAKE-RATE VS MENSALIDADE -->
+  <h1>5. Análise: Take-rate × Mensalidade Fixa</h1>
+
+  <p>Considerações estratégicas sobre cada modelo de cobrança:</p>
+
+  <h3>Mensalidade Fixa Pura</h3>
+  <table>
+    <tr><th style="width:20%">Aspecto</th><th>Análise</th></tr>
+    <tr><td class="positive">Vantagens</td><td>Receita previsível, fácil de vender, fornecedor grande adora (% baixo sobre GMV), simples de comunicar</td></tr>
+    <tr><td class="negative">Desvantagens</td><td>Fornecedor pequeno desiste (preço alto para o tamanho dele), YNTHEGRA deixa dinheiro na mesa com fornecedor grande</td></tr>
+  </table>
+
+  <h3>Take-rate Puro (% por pedido/GMV)</h3>
+  <table>
+    <tr><th style="width:20%">Aspecto</th><th>Análise</th></tr>
+    <tr><td class="positive">Vantagens</td><td>Escala com o sucesso do cliente, alinhamento de incentivo, barreira de entrada baixa, atrativo para pequenos</td></tr>
+    <tr><td class="negative">Desvantagens</td><td>Receita instável (mês ruim = caos no caixa), pune fornecedor grande, requer integração profunda com pagamentos, difícil para fornecedor prever custo</td></tr>
+  </table>
+
+  <h3>Modelo Híbrido com CAP <span style="color:#059669">(Recomendado)</span></h3>
+  <table>
+    <tr><th style="width:20%">Aspecto</th><th>Análise</th></tr>
+    <tr><td class="positive">Vantagens</td><td>Baixa fricção de entrada + escala com cliente + previsibilidade (teto) + alinhamento de incentivo + mercado entende (Shopify Plus usa)</td></tr>
+    <tr><td class="negative">Desvantagens</td><td>Mais complexo de comunicar (precisa calculadora na landing), necessário medir bem "pedidos processados" (critério claro)</td></tr>
+  </table>
+
+  <!-- SEÇÃO 6: SIMULAÇÃO -->
+  <div class="page-break"></div>
+  <h1>6. Simulação por Tamanho de Fornecedor</h1>
+
+  <p>Análise comparativa assumindo ticket médio de R$ 150 por pedido no segmento de moda fitness:</p>
+
+  <h3>Fornecedor Pequeno — 10 drops, ~200 pedidos/mês</h3>
+  <p>Volume transacionado: <strong>R$ 30.000/mês</strong></p>
+  <table>
+    <thead><tr><th>Modelo</th><th style="text-align:right">Paga/mês</th><th style="text-align:right">% efetivo</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>Mensalidade fixa R$ 497</td><td style="text-align:right">R$ 497</td><td style="text-align:right">1,65%</td><td>Aceitável</td></tr>
+      <tr><td>Take-rate 2%</td><td style="text-align:right">R$ 600</td><td style="text-align:right" class="negative">2,00%</td><td>Pior para fornecedor</td></tr>
+      <tr><td>Take-rate 1%</td><td style="text-align:right">R$ 300</td><td style="text-align:right">1,00%</td><td>YNTHEGRA fatura menos</td></tr>
+      <tr style="background:#eff6ff"><td class="emphasis">Híbrido: R$ 297 + 1%</td><td style="text-align:right" class="emphasis">R$ 597</td><td style="text-align:right">1,99%</td><td class="emphasis">Entrada acessível</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Fornecedor Médio — 30 drops, ~600 pedidos/mês</h3>
+  <p>Volume transacionado: <strong>R$ 90.000/mês</strong></p>
+  <table>
+    <thead><tr><th>Modelo</th><th style="text-align:right">Paga/mês</th><th style="text-align:right">% efetivo</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>Mensalidade fixa R$ 497</td><td style="text-align:right">R$ 497</td><td style="text-align:right" class="positive">0,55%</td><td>Fornecedor adora</td></tr>
+      <tr><td>Take-rate 2%</td><td style="text-align:right">R$ 1.800</td><td style="text-align:right" class="negative">2,00%</td><td>Fornecedor chora</td></tr>
+      <tr><td>Take-rate 1%</td><td style="text-align:right">R$ 900</td><td style="text-align:right">1,00%</td><td>Equilibrado</td></tr>
+      <tr style="background:#eff6ff"><td class="emphasis">Híbrido: R$ 297 + 1%</td><td style="text-align:right" class="emphasis">R$ 1.197</td><td style="text-align:right">1,33%</td><td class="emphasis">Justo para ambos</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Fornecedor Grande — 100 drops, ~2.000 pedidos/mês</h3>
+  <p>Volume transacionado: <strong>R$ 300.000/mês</strong></p>
+  <table>
+    <thead><tr><th>Modelo</th><th style="text-align:right">Paga/mês</th><th style="text-align:right">% efetivo</th><th>Observação</th></tr></thead>
+    <tbody>
+      <tr><td>Mensalidade fixa R$ 497</td><td style="text-align:right">R$ 497</td><td style="text-align:right" class="positive">0,16%</td><td>Fornecedor em êxtase</td></tr>
+      <tr><td>Take-rate 2%</td><td style="text-align:right">R$ 6.000</td><td style="text-align:right" class="negative">2,00%</td><td>Fornecedor sai</td></tr>
+      <tr><td>Take-rate 1%</td><td style="text-align:right">R$ 3.000</td><td style="text-align:right">1,00%</td><td>Ainda alto</td></tr>
+      <tr style="background:#eff6ff"><td class="emphasis">Híbrido com CAP R$ 2.500</td><td style="text-align:right" class="emphasis">R$ 2.500</td><td style="text-align:right">0,83%</td><td class="emphasis">Protege o grande</td></tr>
+    </tbody>
+  </table>
+
+  <div class="highlight-box warning">
+    <strong>Conclusão:</strong> O modelo híbrido com CAP (teto) é o único que atende satisfatoriamente aos três perfis de fornecedor. Mensalidade fixa pune pequenos; take-rate puro pune grandes. Híbrido com CAP equilibra entrada acessível + escala + previsibilidade.
+  </div>
+
+  <!-- SEÇÃO 7: MODELO HÍBRIDO -->
+  <div class="page-break"></div>
+  <h1>7. Modelo Híbrido Recomendado</h1>
+
+  <div class="highlight-box">
+    <h3 style="margin-top:0">Estrutura de cobrança para novos fornecedores</h3>
+    <p><strong>Base:</strong> R$ 297/mês (inclui até 50 pedidos processados)</p>
+    <p><strong>Excedente:</strong> R$ 4,90 por pedido acima do incluso</p>
+    <p><strong>CAP (teto):</strong> R$ 2.500/mês total</p>
+  </div>
+
+  <h2>Faixas práticas de cobrança</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Pedidos/mês</th>
+        <th style="text-align:right">Valor cobrado</th>
+        <th>Observação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>0 a 50 pedidos</td><td style="text-align:right">R$ 297 fixo</td><td>Base inclusa</td></tr>
+      <tr><td>100 pedidos</td><td style="text-align:right">R$ 542</td><td>R$ 297 + R$ 245 (50 excedentes)</td></tr>
+      <tr><td>250 pedidos</td><td style="text-align:right">R$ 1.277</td><td>R$ 297 + R$ 980 (200 excedentes)</td></tr>
+      <tr><td>500 pedidos</td><td style="text-align:right">R$ 2.500</td><td>Bateu o CAP</td></tr>
+      <tr><td>1.000 pedidos</td><td style="text-align:right">R$ 2.500</td><td>CAP mantido</td></tr>
+      <tr><td>2.000 pedidos</td><td style="text-align:right">R$ 2.500</td><td>CAP mantido — previsibilidade</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Tiers de Fornecedores (evolução futura)</h2>
+  <p>Após 6-12 meses de operação, pode-se estruturar três tiers de planos:</p>
+
+  <div class="three-column">
+    <div class="option-card">
+      <div class="tier">Tier 1</div>
+      <div class="name">Starter</div>
+      <div class="price">R$ 297/mês</div>
+      <div class="price-detail">+ R$ 4,90/pedido</div>
+      <ul class="features">
+        <li>✓ Até 50 pedidos inclusos</li>
+        <li>✓ CAP R$ 2.500/mês</li>
+        <li>✓ Suporte padrão</li>
+      </ul>
+    </div>
+
+    <div class="option-card recommended">
+      <div class="badge">Popular</div>
+      <div class="tier">Tier 2</div>
+      <div class="name">Growth</div>
+      <div class="price">R$ 497/mês</div>
+      <div class="price-detail">+ R$ 3,90/pedido</div>
+      <ul class="features">
+        <li>✓ Até 100 pedidos inclusos</li>
+        <li>✓ CAP R$ 4.000/mês</li>
+        <li>✓ Suporte prioritário</li>
+        <li>✓ Relatórios avançados</li>
+      </ul>
+    </div>
+
+    <div class="option-card">
+      <div class="tier">Tier 3</div>
+      <div class="name">Enterprise</div>
+      <div class="price">R$ 997/mês</div>
+      <div class="price-detail">+ R$ 2,90/pedido</div>
+      <ul class="features">
+        <li>✓ Pedidos ilimitados</li>
+        <li>✓ Sem CAP (negociável)</li>
+        <li>✓ Account manager</li>
+        <li>✓ SLA dedicado</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SEÇÃO 8: OFERTA DE LANÇAMENTO -->
+  <h1>8. Oferta de Lançamento (Primeiros 20 Fornecedores)</h1>
+
+  <p>Para acelerar a aquisição inicial e validar product-market fit, propõe-se uma oferta estratégica de lançamento:</p>
+
+  <div class="highlight-box success">
+    <strong>Estrutura da oferta promocional:</strong>
+    <table style="margin-top:12px">
+      <thead>
+        <tr><th>Período</th><th>Mensalidade</th><th>Take-rate</th><th>Observação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mês 1-3</td><td>R$ 0</td><td>R$ 6,90/pedido</td><td>Zero compromisso — teste sem risco</td></tr>
+        <tr><td>Mês 4-12</td><td>R$ 197</td><td>R$ 4,90/pedido</td><td>Migração suave para plano pago</td></tr>
+        <tr><td>Ano 2+</td><td>R$ 297</td><td>R$ 4,90/pedido</td><td>Preço cheio (Starter)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Por que a oferta de lançamento é estratégica</h3>
+  <ul>
+    <li><strong>Remove barreira de entrada:</strong> fornecedor testa sem risco nos primeiros 3 meses</li>
+    <li><strong>Cria switching cost:</strong> após 3 meses, fornecedor já está operacionalmente dependente do SISTEX</li>
+    <li><strong>Acelera validação de mercado:</strong> permite fechar os primeiros 20 clientes em 3-6 meses</li>
+    <li><strong>Gera cases de sucesso:</strong> os primeiros clientes viram referências para os próximos</li>
+    <li><strong>Reduz custo de aquisição (CAC):</strong> word-of-mouth nos primeiros clientes reduz investimento em marketing</li>
+  </ul>
+
+  <!-- SEÇÃO 9: PROJEÇÃO DE FATURAMENTO -->
+  <div class="page-break"></div>
+  <h1>9. Projeção de Faturamento YNTHEGRA</h1>
+
+  <p>Cenário conservador considerando mix de tamanhos de fornecedor (60% pequenos, 30% médios, 10% grandes):</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Período</th>
+        <th style="text-align:center">Fornecedores ativos</th>
+        <th style="text-align:right">Receita/mês média</th>
+        <th style="text-align:right">Receita acumulada (12 meses)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Mês 3</td><td style="text-align:center">5</td><td style="text-align:right">R$ 2.500</td><td style="text-align:right">R$ 30.000</td></tr>
+      <tr><td>Mês 6</td><td style="text-align:center">12</td><td style="text-align:right">R$ 8.000</td><td style="text-align:right">R$ 96.000</td></tr>
+      <tr><td>Ano 1</td><td style="text-align:center">25</td><td style="text-align:right">R$ 22.000</td><td style="text-align:right">R$ 264.000</td></tr>
+      <tr><td>Ano 2</td><td style="text-align:center">60</td><td style="text-align:right">R$ 65.000</td><td style="text-align:right">R$ 780.000</td></tr>
+      <tr style="background:#eff6ff">
+        <td class="emphasis">Ano 3</td>
+        <td style="text-align:center" class="emphasis">120</td>
+        <td style="text-align:right" class="emphasis">R$ 150.000</td>
+        <td style="text-align:right" class="emphasis">R$ 1.800.000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Faturamento consolidado YNTHEGRA</h2>
+  <p>Considerando as 3 fontes de receita: licença Ferstex + assinaturas fornecedores + split de revendedores (70%):</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Fonte de receita</th>
+        <th style="text-align:right">Ano 1</th>
+        <th style="text-align:right">Ano 2</th>
+        <th style="text-align:right">Ano 3</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Licença Ferstex (vitalícia)</td><td style="text-align:right">R$ 60.000</td><td style="text-align:right">—</td><td style="text-align:right">—</td></tr>
+      <tr><td>Manutenção Ferstex (R$ 2.500/mês)</td><td style="text-align:right">R$ 30.000</td><td style="text-align:right">R$ 30.000</td><td style="text-align:right">R$ 30.000</td></tr>
+      <tr><td>Assinaturas outros fornecedores (híbrido)</td><td style="text-align:right">R$ 264.000</td><td style="text-align:right">R$ 780.000</td><td style="text-align:right">R$ 1.800.000</td></tr>
+      <tr><td>Split revendedores (500 drops × R$ 130 × 70% × 12m)*</td><td style="text-align:right">R$ 178.800</td><td style="text-align:right">R$ 546.000</td><td style="text-align:right">R$ 1.092.000</td></tr>
+      <tr style="background:#f0fdf4">
+        <td class="emphasis">TOTAL ANO</td>
+        <td style="text-align:right" class="emphasis positive">R$ 532.800</td>
+        <td style="text-align:right" class="emphasis positive">R$ 1.356.000</td>
+        <td style="text-align:right" class="emphasis positive">R$ 2.922.000</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="font-size:9pt;color:#64748b">* Estimativa conservadora baseada em 25 drops médios por fornecedor ativo × split 70/30.</p>
+
+  <div class="highlight-box success">
+    <strong>Projeção consolidada:</strong> Em 3 anos, faturamento anual estimado entre <strong>R$ 2,5 milhões e R$ 3 milhões</strong>, operando com estrutura enxuta (2 sócios + ferramentas SaaS).
+  </div>
+
+  <!-- SEÇÃO 10: RISCOS -->
+  <div class="page-break"></div>
+  <h1>10. Análise de Riscos por Modelo</h1>
+
+  <h2>Riscos do modelo de mensalidade fixa pura</h2>
+  <ul>
+    <li><strong>Perda de clientes pequenos:</strong> R$ 497/mês pode ser proibitivo para fornecedores iniciantes, limitando a expansão da base.</li>
+    <li><strong>Receita subótima com grandes:</strong> fornecedor com volume alto paga o mesmo que um pequeno, reduzindo a margem de lucro relativa.</li>
+    <li><strong>Churn por crescimento:</strong> fornecedor que cresceu muito pode negociar desconto ou migrar para solução própria.</li>
+  </ul>
+
+  <h2>Riscos do modelo de take-rate puro</h2>
+  <ul>
+    <li><strong>Instabilidade de receita:</strong> mês com poucos pedidos = receita baixa. Inviabiliza planejamento financeiro.</li>
+    <li><strong>Fuga de clientes grandes:</strong> 2% sobre GMV alto torna-se muito caro; clientes saem ou negociam.</li>
+    <li><strong>Complexidade de integração:</strong> requer medição precisa de GMV, reconciliação, disputas.</li>
+    <li><strong>Percepção negativa:</strong> fornecedor sente que "paga proporcionalmente ao próprio sucesso", criando fricção emocional.</li>
+  </ul>
+
+  <h2>Riscos do modelo híbrido com CAP (mitigados)</h2>
+  <ul>
+    <li><strong>Complexidade de comunicação:</strong> requer página de pricing com calculadora ou exemplos claros. <em>Mitigação:</em> landing page com simulador.</li>
+    <li><strong>Critério de "pedido processado":</strong> necessário definir claramente o que conta como pedido (novo, cancelado, estornado). <em>Mitigação:</em> contar apenas pedidos finalizados com pagamento aprovado.</li>
+    <li><strong>CAP pode ser percebido como "subsídio aos grandes":</strong> pequenos podem achar injusto pagar a mesma % que grandes. <em>Mitigação:</em> comunicar claramente que o CAP garante previsibilidade e que o modelo é escalonado.</li>
+  </ul>
+
+  <!-- SEÇÃO 11: DECISÕES -->
+  <h1>11. Decisões Pendentes (Erick + Sócio)</h1>
+
+  <div class="highlight-box warning">
+    <strong>Antes da apresentação formal à Ferstex e da configuração do sistema de billing, é necessário decidir:</strong>
+  </div>
+
+  <h3>Sobre a Ferstex (vitalício)</h3>
+  <ul>
+    <li>Qual das 3 opções (A/B/C) apresentar como recomendada?</li>
+    <li>Prazo de pagamento: à vista, 6 parcelas ou 12 parcelas?</li>
+    <li>Desconto à vista: 10% ou 15%?</li>
+    <li>Cláusula de exclusividade geográfica (ex: Ferstex exclusiva em SC)?</li>
+  </ul>
+
+  <h3>Sobre outros fornecedores (recorrência)</h3>
+  <ul>
+    <li>Adotar modelo híbrido com CAP ou mensalidade fixa R$ 497?</li>
+    <li>Topar oferta de lançamento para os primeiros 20 fornecedores?</li>
+    <li>Valor do CAP: R$ 2.500 ou R$ 3.000?</li>
+    <li>Split dos drops (70/30) mantido para fornecedores pagantes?</li>
+  </ul>
+
+  <h3>Sobre operação e legal</h3>
+  <ul>
+    <li>Contratar advogado SaaS para estruturação dos contratos?</li>
+    <li>Definir responsável pela relação com fornecedor (account manager)?</li>
+    <li>Criar landing page de vendas com calculadora de preços?</li>
+  </ul>
+
+  <!-- SEÇÃO 12: PRÓXIMOS PASSOS -->
+  <h1>12. Próximos Passos</h1>
+
+  <ol style="margin-left:22px;line-height:1.8">
+    <li><strong>Reunião entre sócios</strong> para validar este documento e tomar as decisões listadas acima.</li>
+    <li><strong>Contratar advogado SaaS</strong> para estruturar minuta de contrato Ferstex e modelo padrão para outros fornecedores.</li>
+    <li><strong>Preparar proposta comercial formal para Ferstex</strong> com 3 opções (ancoragem), destacando Opção B como recomendada.</li>
+    <li><strong>Agendar apresentação com diretoria Ferstex</strong> posicionando SISTEX como investimento estratégico com ROI de 5-6 meses.</li>
+    <li><strong>Implementar sistema de billing no SISTEX</strong> (Bloco 12+) capaz de suportar: mensalidade fixa, take-rate por pedido, CAP mensal, tiers de planos.</li>
+    <li><strong>Criar landing page pública</strong> (portalsistex.com/precos) com calculadora interativa para fornecedores novos.</li>
+    <li><strong>Ativar oferta de lançamento</strong> para os primeiros 20 fornecedores (campanha de 60-90 dias).</li>
+  </ol>
+
+  <!-- SEÇÃO 13: CONCLUSÃO -->
+  <div class="page-break"></div>
+  <h1>13. Conclusão e Visão Estratégica</h1>
+
+  <p>O SISTEX é um ativo tecnológico com valor de mercado estimado em <strong>R$ 358.000 a R$ 500.000</strong> se fosse desenvolvido de forma tradicional. A YNTHEGRA o construiu com fração desse custo graças ao uso estratégico de ferramentas de IA, mas o <strong>valor entregue ao cliente final é o mesmo</strong>.</p>
+
+  <p>A precificação deve refletir esse valor, considerando:</p>
+  <ul>
+    <li>O <strong>custo de oportunidade</strong> da Ferstex não ter o sistema (R$ 15.500/mês de economia)</li>
+    <li>O <strong>posicionamento de mercado</strong> (SISTEX é infraestrutura premium, não commodity)</li>
+    <li>A <strong>escalabilidade</strong> do modelo (vender para múltiplos fornecedores)</li>
+  </ul>
+
+  <p>A recomendação consolidada é:</p>
+
+  <blockquote>
+    <strong>Ferstex:</strong> Licença vitalícia de R$ 60.000 + manutenção de R$ 2.500/mês (Opção B). Posicionamento como parceiro-piloto estratégico, com ROI de aproximadamente 6 meses para a Ferstex.
+  </blockquote>
+
+  <blockquote>
+    <strong>Outros fornecedores:</strong> Modelo híbrido com R$ 297/mês base + R$ 4,90/pedido processado + CAP de R$ 2.500/mês. Oferta de lançamento para os primeiros 20 fornecedores (3 meses grátis + R$ 197/mês por 9 meses).
+  </blockquote>
+
+  <blockquote>
+    <strong>Projeção de faturamento:</strong> R$ 532k no primeiro ano, R$ 1,35M no segundo ano e R$ 2,9M no terceiro ano, considerando cenário conservador de 120 fornecedores ativos em 36 meses.
+  </blockquote>
+
+  <p>Esta estratégia equilibra a geração de capital imediato (licença Ferstex), a construção de receita recorrente previsível (mensalidades + take-rate com CAP) e a escalabilidade do negócio (modelo replicável para N fornecedores).</p>
+
+  <div class="highlight-box success">
+    <strong>Recomendação final:</strong> Aprovar este documento como base estratégica, definir as decisões pendentes em reunião de sócios, contratar advogado especializado e iniciar ciclo de vendas formal com Ferstex em 2 semanas.
+  </div>
+
+  <div class="signature">
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div class="signature-label">Erick<br><small>Sócio YNTHEGRA</small></div>
+    </div>
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <div class="signature-label">Sócio Fundador<br><small>YNTHEGRA</small></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>YNTHEGRA</strong> — Plataforma de tecnologia para fornecedores brasileiros</p>
+    <p>Documento confidencial. Uso interno.</p>
+    <p>Versão 1.0 — 22 de abril de 2026</p>
+  </div>
+
+</div>
+
+</body>
+</html>
