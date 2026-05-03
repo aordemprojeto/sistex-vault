@@ -124,6 +124,18 @@ Depois disso, você está com 100% do contexto pra operar.
 - O plugin avisa e mostra o conflito
 - Resolve manualmente abrindo o arquivo e escolhendo qual versão fica
 
+## Achados importantes do setup do Erick (2026-05-02)
+
+Quando o Erick configurou o vault no PC dele, descobrimos pontos que valem nota:
+
+1. **`data.json` do plugin Git NÃO sincroniza credenciais entre membros (e isso é bom).** No PC do Rian, os campos `username`, `authorName` e `authorEmail` vinham do git config global do Windows — não estavam explicitamente populados no `data.json`. No PC do Erick, populamos explicitamente os 3 campos no `data.json` pra garantir independência do git global. **Recomendação:** sempre popular esses 3 campos manualmente no PC de cada novo membro, independente do git config global.
+
+2. **Primeira autenticação via Git Credential Manager exige browser OAuth.** Quando o Erick rodou o primeiro `git push` da CLI dele, o Git Credential Manager abriu o navegador pedindo OAuth do GitHub. Após autenticar uma vez, fica salvo e todos os pushes futuros (incluindo os automáticos do plugin Obsidian Git) rodam sem prompt. **Recomendação:** prepare o novo membro pra esse momento — pode confundir se não esperar.
+
+3. **OneDrive/Documents sincronizado pode bloquear `git clone`.** No PC do Erick (BLECKESTER), tentar clonar em `C:\Users\BLECKESTER\Documents\YNTHEGRA` deu "Permission denied" porque o Documents estava sincronizado com OneDrive. Solução: cloname direto em `C:\sistex-vault` (raiz do C:). Funciona idêntico, evita problemas de permissão.
+
+4. **Pasta YNTHEGRA já existente no Documents pode causar conflito.** Se o membro tentou seguir um tutorial anterior do Obsidian, pode ter uma pasta `Documents\YNTHEGRA` vazia. Git clone se recusa a clonar pra pasta existente. Solução: usar nome diferente ou raiz do C: (vide ponto 3).
+
 ## Notas finais
 
 - **NÃO compartilhe credenciais com outros membros** — cada um deve ter sua própria conta GitHub
